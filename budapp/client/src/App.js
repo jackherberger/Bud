@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import TransactionTable from './TransactionTable';
-import CategoryPieChart from './CategoryPieChart';
-import './App.css'; // Import your CSS file
-
+import React, { useState, useEffect } from "react";
+import TransactionTable from "./TransactionTable";
+// import CategoryPieChart from './CategoryPieChart';
+import "./App.css"; // Import your CSS file
 
 function App() {
   const [transactions, setTransactions] = useState([]);
@@ -15,9 +14,22 @@ function App() {
       const year = 2023;
       const month = Math.floor(Math.random() * 12) + 1;
       const day = Math.floor(Math.random() * 28) + 1; // Choose any day within the month
-      const randomDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-      const categories = ['Groceries', 'Clothes', 'Gas', 'Rent', 'Utilites', 'Enterntainment', 'Electronics', 'Travel', 'Other'];
-      const randomCategory = categories[Math.floor(Math.random() * categories.length)];
+      const randomDate = `${year}-${month.toString().padStart(2, "0")}-${day
+        .toString()
+        .padStart(2, "0")}`;
+      const categories = [
+        "Groceries",
+        "Clothes",
+        "Gas",
+        "Rent",
+        "Utilites",
+        "Enterntainment",
+        "Electronics",
+        "Travel",
+        "Other",
+      ];
+      const randomCategory =
+        categories[Math.floor(Math.random() * categories.length)];
 
       return {
         id,
@@ -36,7 +48,6 @@ function App() {
 
     setTransactions(randomTransactions);
   }, []); // Empty dependency array to run this effect only once
-
 
   return (
     <div className="App">
