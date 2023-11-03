@@ -1,5 +1,4 @@
-https://manglekuo.medium.com/running-mongodb-on-docker-with-macos-b08324f5aab2
-
+https://github.com/cataniamatt/mongodb-docker
 
 //make db
 docker-compose build
@@ -13,8 +12,10 @@ docker-compose up -d
 docker-compose down
 
 // to connect to mongodb in command line
-docker exec -it mongodb bash
+docker exec -it mongo bash
 
+// to connect to mongodb in command line
+ mongosh --username root --password rootpassword
 
 0. docker ps // get container name
 1. get in container with docker exec -it <container_name> /bin/bash
@@ -23,4 +24,7 @@ docker exec -it mongodb bash
 or 
 
 1. docker exec -it <container_name> mongosh
+
+//stop db
+docker stop (name) && docker rm (name)
 
