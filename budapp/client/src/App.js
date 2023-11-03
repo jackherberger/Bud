@@ -43,7 +43,7 @@ function App() {
       <h1> Bud™️ </h1>
       <p>The smart transaction tracker.</p>
       <TransactionTable transactions={transactions} />
-      {/* <CategoryPieChart transactions={transactions} /> */}
+      {/* <CategoryPieChart transactions={transactions} />  */}
     </div>
   );
 }
