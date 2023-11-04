@@ -7,13 +7,26 @@ const UserSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-    job: {
+    permissions: {
+      type: Number,
+      required: true,
+    },
+    email: {
       type: String,
       required: true,
       trim: true,
       validate(value) {
-        if (value.length < 2)
-          throw new Error("Invalid job, must be at least 2 characters.");
+        if (!value.includes("@"))
+          throw new Error("Invalid email, must include @.");
+      },
+    },
+    password: {
+      type: String,
+      required: true,
+      trim: true,
+      validate(value) {
+        if (value.length < 6)
+          throw new Error("Invalid password, must be at least 6 characters.");
       },
     },
   },
