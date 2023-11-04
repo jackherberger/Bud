@@ -1,11 +1,13 @@
 import express from "express";
 import cors from "cors";
-import userServices from "./models/user-services.js"
+import Services from "./models/services.js"
+
+// these are tests to see if the database is working use as base for logic in the future
+const savedUser = await Services.addUser("dude", "horse@gamil", "ppopeede", 0);
+const users = await Services.getUsers();
 
 
-const savedUser = await userServices.addUser({name: "John", job: "Developer"});
-const users = await userServices.getUsers();
-console.log(savedUser);
+//console.log(savedUser);
 console.log(users);
 
 const PORT = process.env.PORT || 3001;

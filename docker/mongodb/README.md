@@ -1,4 +1,6 @@
 https://github.com/cataniamatt/mongodb-docker
+https://vsupalov.com/database-in-docker/
+
 
 //make db
 docker-compose build
@@ -27,4 +29,10 @@ or
 
 //stop db
 docker stop (name) && docker rm (name)
+
+//mongo dump
+mongodump --username root --password rootpassword
+
+//mongo restore
+mongorestore --username root --password rootpassword (dump folder)
 

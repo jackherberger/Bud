@@ -3,9 +3,9 @@ import mongoose from "mongoose";
 const AccountSchema = new mongoose.Schema(
     {
         balance: {
-        type: Number,
-        required: true,
-        trim: true,
+            type: Number,
+            required: true,
+            trim: true,
         },
         income:{
             type: Number,
@@ -33,3 +33,6 @@ const AccountSchema = new mongoose.Schema(
     },
     { collection: "accounts_list" }
     );
+
+const Account = mongoose.model("Account", AccountSchema);
+export default Account;

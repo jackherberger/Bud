@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import Transaction from "./transaction";
-import Account from "./account";
+import Transaction from "./transaction.js";
+import Account from "./account.js";
 
 const customerSchema = new mongoose.Schema(
     {
@@ -20,12 +20,13 @@ const customerSchema = new mongoose.Schema(
        
         },
         transaction_list: {
-            type: [Transaction],
+            type: [Transaction.schema],
             required: false,
         },
         account: {
-            type: Account,
+            type: mongoose.ObjectId,
             required: false,
+            ref: "Account",
         }
 
     },
