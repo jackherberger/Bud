@@ -1,6 +1,20 @@
 https://github.com/cataniamatt/mongodb-docker
 https://vsupalov.com/database-in-docker/
 
+# GET STARTED
+0. get into docker/mongodb
+## build docker image
+1. docker-compose up -d
+2. docker exec -it mongo bash
+## retores data in mongo dump
+3. mongorestore --username root --password rootpassword /db-dump 
+
+
+
+
+
+
+
 
 //make db
 docker-compose build
@@ -32,6 +46,7 @@ docker stop (name) && docker rm (name)
 
 //mongo dump
 mongodump --username root --password rootpassword
+docker cp <containerId>:/file/path/within/container /host/path/target
 
 //mongo restore
 mongorestore --username root --password rootpassword (dump folder)
