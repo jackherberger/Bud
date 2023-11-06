@@ -5,6 +5,7 @@ import TransactionTable from "./TransactionTable";
 import "./App.css"; // Import your CSS file
 import Login from "./login";
 import SignUp from "./signup";
+import About from "./about";
 
 function App() {
   const [transactions, setTransactions] = useState([]);
@@ -77,6 +78,7 @@ function App() {
             path="/transactions"
             element={<TransactionTable transactions={transactions} />}
           />
+          <Route path="/about" element={<About />} />
         </Routes>
       </Router>
       {/* <CategoryPieChart transactions={transactions} /> */}
