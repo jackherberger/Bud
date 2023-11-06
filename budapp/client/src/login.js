@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import bcrypt from "bcryptjs";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
+import './login.css';
+
 
 const Login = () => {
   const [username, setUsername] = useState("");

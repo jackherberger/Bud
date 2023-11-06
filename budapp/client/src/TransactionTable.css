@@ -4,6 +4,17 @@
   align-items: center;
 }
 
+html, body {
+  height: 100%;
+}
+
+/* Define a linear gradient background */
+body {
+  background: linear-gradient(180deg, #ffffff, #b0e0e6);
+  /* The above gradient goes from white (#ffffff) to light blue (#b0e0e6) */
+  margin: 0; /* Remove default body margin to ensure the gradient covers the full page */
+}
+
 .transaction-table {
   border-collapse: collapse;
   width: 100%;
