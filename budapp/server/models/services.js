@@ -9,6 +9,8 @@ const connectionString = `mongodb://localhost:27017/mongo`;
 
 mongoose.connect(connectionString, {
     authSource: "admin",  
+    user: "root",
+    pass: "rootpassword",
   })
     .then(() => {
       console.log('Connected to MongoDB');
