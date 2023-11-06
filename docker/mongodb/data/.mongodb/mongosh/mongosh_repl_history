@@ -1,9 +1,0 @@
-exit
-show collections
-db.col.insertOne({x:1})
-show collections
-show tables
-use test
-show tables
-use data
-show dbs
