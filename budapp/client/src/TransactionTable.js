@@ -1,14 +1,79 @@
 import React, { useState } from 'react';
-import './TransactionTable.css'; // Import your CSS file
+import './TransactionTable.css';
 
-function TransactionTable({ transactions }) {
-  
-      
-      
-  const categories = ['Groceries', 'Clothes', 'Gas', 'Rent', 'Utilites', 'Enterntainment', 'Electronics', 'Travel', 'Other'];
+function TransactionTable({ transactions, onAddTransaction }) {
+  const categories = [
+    'Groceries', 'Clothes', 'Gas', 'Rent', 'Utilities', 'Entertainment', 'Electronics', 'Travel', 'Other'
+  ];
+
+  const [newTransaction, setNewTransaction] = useState({
+    name: '',
+    price: '',
+    date: '',
+    category: categories[0], // Default category
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewTransaction({
+      ...newTransaction,
+      [name]: value,
+    });
+  };
+
+  const handleAddTransaction = () => {
+    const formattedDate = new Date(newTransaction.date).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    });
+    
+    onAddTransaction(newTransaction);
+    setNewTransaction({
+      name: '',
+      price: '',
+      date: '',
+      category: categories[0],
+    });
+  };
 
   return (
-    <table className="transaction-table">
+    <div>
+      <div className="add-transaction-form">
+        <input
+          type="text"
+          name="name"
+          placeholder="Item"
+          value={newTransaction.name}
+          onChange={handleInputChange}
+        />
+        <input
+          type="number"
+          name="price"
+          placeholder="Price"
+          value={newTransaction.price}
+          onChange={handleInputChange}
+        />
+        <input
+          type="date"
+          name="date"
+          value={newTransaction.date}
+          onChange={handleInputChange}
+        />
+        <select
+          name="category"
+          value={newTransaction.category}
+          onChange={handleInputChange}
+        >
+          {categories.map((category) => (
+            <option key={category} value={category}>
+              {category}
+            </option>
+          ))}
+        </select>
+        <button onClick={handleAddTransaction}>Add</button>
+      </div>
+      <table className="transaction-table">
       <thead>
         <tr>
           <th>Item</th>
@@ -21,24 +86,16 @@ function TransactionTable({ transactions }) {
         {transactions.map((transaction) => (
           <tr key={transaction.id}>
             <td>{transaction.name}</td>
-            <td>${transaction.price.toFixed(2)}</td>
+            <td>${transaction.price}</td>
             <td>{transaction.date}</td>
-            <td>
-              <select value={transaction.category}>
-                {categories.map((category) => (
-                  <option key={category} value={category}>
-                    {category}
-                  </option>
-                ))}
-              </select>
-            </td>
+            <td>{transaction.category}</td>
           </tr>
         ))}
       </tbody>
-    </table>
+        {/* ... Table headers and existing transactions */}
+      </table>
+    </div>
   );
 }
 
 export default TransactionTable;
-
-

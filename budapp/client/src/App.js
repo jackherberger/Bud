@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import TransactionTable from "./TransactionTable";
-// import CategoryPieChart from './CategoryPieChart';
-import "./App.css"; // Import your CSS file
+import CategoryPieChart from './CategoryPieChart'; 
+import DateBarChart from './DateBarChart'; 
+import "./App.css"; 
 import Login from "./login";
 import SignUp from "./signup";
 
-function App() {
-  const [transactions, setTransactions] = useState([]);
 
+function App() {
   useEffect(() => {
     // Function to generate a random transaction
     const generateRandomTransaction = (id) => {
@@ -52,19 +52,23 @@ function App() {
     setTransactions(randomTransactions);
   }, []); // Empty dependency array to run this effect only once
 
+  
+
+
+  const [transactions, setTransactions] = useState([]);
+
+  const handleAddTransaction = (newTransaction) => {
+    
+    // Update the transactions array by adding the new transaction
+    setTransactions([...transactions, newTransaction]);
+  };
+
+  const onAddTransaction = (newTransaction) => {
+    // Add the new transaction to your data state
+    setTransactions([...transactions, newTransaction]);
+  };
+
   return (
-    //   <div className="App">
-    //     <h1> Bud™️ </h1>
-    //     <p>The smart transaction tracker.</p>
-    //     {/* <TransactionTable transactions={transactions} /> */}
-    //     <Router>
-    //       <Routes>
-    //         <Route exact path="/" element={<Login />} />
-    //         <Route path = "/transactions" element={<TransactionTable transactions={transactions} />} />
-    //       </Routes>
-    //     </Router>
-    //     {/* <CategoryPieChart transactions={transactions} /> */}
-    //   </div>
     <div className="App">
       <h1> Bud™️ </h1>
       <p>The smart transaction tracker.</p>
@@ -72,14 +76,25 @@ function App() {
       <Router>
         <Routes>
           <Route exact path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
+          <Route path="/signup" element={<SignUp />} />          
           <Route
             path="/transactions"
-            element={<TransactionTable transactions={transactions} />}
+            element={
+              <div style={{ display: 'flex' }}>
+                <div style={{ flex: 2 }}>
+                  <TransactionTable transactions={transactions} onAddTransaction={onAddTransaction} />
+                </div>
+                <div style={{ flex: 1 }}>
+                  <CategoryPieChart transactions={transactions} onAddTransaction={onAddTransaction} />
+                </div>
+                <div>
+                  <DateBarChart transactions={transactions} />
+                </div>
+              </div>
+            }
           />
         </Routes>
       </Router>
-      {/* <CategoryPieChart transactions={transactions} /> */}
     </div>
   );
 }
