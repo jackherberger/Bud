@@ -21,6 +21,11 @@ macOS: `lsof -i tcp:27017`
 if you see com.docke under COMMAND then you are good if not then kill the process that is running
 `kill -9 <PID>`
 
+# completely reset docker db
+
+docker system prune -a
+docker volume prune 
+
 //make db
 docker-compose build
 
