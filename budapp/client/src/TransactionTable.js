@@ -1,67 +1,70 @@
-import React, { useState, useEffect } from 'react';
-import './TransactionTable.css'; // Import your CSS file
+import React, { useState } from 'react';
+import './TransactionTable.css';
 
-function TransactionTable() {
-  const [transactions, setTransactions] = useState([]);
+function TransactionTable({ transactions, onAddTransaction }) {
+  const categories = [
+    'Groceries', 'Clothes', 'Gas', 'Rent', 'Utilities', 'Entertainment', 'Electronics', 'Travel', 'Other'
+  ];
 
-  const generateRandomTransaction = (id) => {
-    const randomName = `Item ${id}`;
-    const randomPrice = (Math.random() * 100).toFixed(2);
-    const year = 2023;
-    const month = Math.floor(Math.random() * 12) + 1;
-    const day = Math.floor(Math.random() * 28) + 1;
-    const randomDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-    const categories = ['Groceries', 'Clothes', 'Gas', 'Rent', 'Utilities', 'Entertainment', 'Electronics', 'Travel', 'Other'];
-    const randomCategory = categories[Math.floor(Math.random() * categories.length)];
+  const [newTransaction, setNewTransaction] = useState({
+    name: '',
+    price: '',
+    date: '',
+    category: categories[0], // Default category
+  });
 
-    return {
-      id,
-      name: randomName,
-      price: parseFloat(randomPrice),
-      date: randomDate,
-      category: randomCategory,
-    };
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewTransaction({
+      ...newTransaction,
+      [name]: value,
+    });
   };
 
-  const generateInitialTransactions = () => {
-    const randomTransactions = [];
-    for (let id = 1; id <= 10; id++) {
-      randomTransactions.push(generateRandomTransaction(id));
-    }
-    setTransactions(randomTransactions);
+  const handleAddTransaction = () => {
+    const formattedDate = new Date(newTransaction.date).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    });
+    
+    onAddTransaction(newTransaction);
+    setNewTransaction({
+      name: '',
+      price: '',
+      date: '',
+      category: categories[0],
+    });
   };
-
-  useEffect(() => {
-    generateInitialTransactions();
-  }, []);
-
-  const [selectedCategory, setSelectedCategory] = useState('Groceries');
-  const [inputAmount, setInputAmount] = useState(0);
-
-  const addTransaction = () => {
-    const newTransaction = {
-      id: transactions.length + 1,
-      name: `New Item`,
-      price: parseFloat(inputAmount),
-      date: new Date().toLocaleDateString('sv-SE'),
-      category: selectedCategory,
-    };
-
-    setTransactions([...transactions, newTransaction]);
-    setInputAmount(0);
-    setSelectedCategory('Groceries');
-  };
-
-  const categories = ['Groceries', 'Clothes', 'Gas', 'Rent', 'Utilities', 'Entertainment', 'Electronics', 'Travel', 'Other'];
 
   return (
     <div>
-      <div>
-        <label htmlFor="category">Choose a category:</label>
+      <div className="add-transaction-form">
+        <input
+          type="text"
+          name="name"
+          placeholder="Item"
+          value={newTransaction.name}
+          onChange={handleInputChange}
+        />
+        <input
+          type="number"
+          name="price"
+          placeholder="Price"
+          value={newTransaction.price}
+          onChange={handleInputChange}
+        />
+        <input
+          type="date"
+          name="date"
+          value={newTransaction.date}
+          onChange={handleInputChange}
+        />
         <select
-          id="category"
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
+          name="category"
+          value={newTransaction.category}
+          onChange={handleInputChange}
+
         >
           {categories.map((category) => (
             <option key={category} value={category}>
@@ -69,41 +72,29 @@ function TransactionTable() {
             </option>
           ))}
         </select>
+// <<<<<<< front_end
+        <button onClick={handleAddTransaction}>Add</button>
       </div>
-
-      <div>
-        <label htmlFor="amount">Enter the amount:</label>
-        <input
-          type="number"
-          id="amount"
-          value={inputAmount}
-          onChange={(e) => setInputAmount(e.target.value)}
-          placeholder="Amount"
-        />
-      </div>
-
-      <button onClick={addTransaction}>Add</button>
-
-      <h2>Transactions</h2>
       <table className="transaction-table">
-        <thead>
-          <tr>
-            <th>Item</th>
-            <th>Price</th>
-            <th>Date</th>
-            <th>Category</th>
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Price</th>
+          <th>Date</th>
+          <th>Category</th>
+        </tr>
+      </thead>
+      <tbody>
+        {transactions.map((transaction) => (
+          <tr key={transaction.id}>
+            <td>{transaction.name}</td>
+            <td>${transaction.price}</td>
+            <td>{transaction.date}</td>
+            <td>{transaction.category}</td>
           </tr>
-        </thead>
-        <tbody>
-          {transactions.map((transaction) => (
-            <tr key={transaction.id}>
-              <td>{transaction.name}</td>
-              <td>${transaction.price.toFixed(2)}</td>
-              <td>{transaction.date}</td>
-              <td>{transaction.category}</td>
-            </tr>
-          ))}
-        </tbody>
+        ))}
+      </tbody>
+        {/* ... Table headers and existing transactions */}
       </table>
     </div>
   );
