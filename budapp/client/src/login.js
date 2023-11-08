@@ -1,29 +1,30 @@
-import React, { useState } from "react";
-import bcrypt from "bcryptjs";
-import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
-import './login.css';
-
+import React, { useState } from "react"
+import bcrypt from "bcryptjs"
+import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google"
+import "./login.css"
 
 const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
 
   const handleGoogleLoginSuccess = (response) => {
     // Handle successful Google login
-    console.log("Google login successful:", response);
-  };
+    console.log("Google login successful:", response)
+  }
 
   const handleGoogleLoginFailure = (error) => {
     // Handle failed Google login
-    console.error("Google login failed:", error);
-  };
+    console.error("Google login failed:", error)
+  }
 
   const handleLogin = () => {
-    const saltRounds = 8;
-    const hashedPassword = bcrypt.hashSync(password, saltRounds);
+    const saltRounds = 8
+    const hashedPassword = bcrypt.hashSync(password, saltRounds)
 
-    console.log(`Logging in with username: ${username}, hashed password: ${hashedPassword}`);
-  };
+    console.log(
+      `Logging in with username: ${username}, hashed password: ${hashedPassword}`
+    )
+  }
 
   return (
     <div>
@@ -57,16 +58,17 @@ const Login = () => {
 
         {/* Google Login Button */}
         <GoogleOAuthProvider clientId="1069227459562-apu19fh635p21a78pdq4r4h96g5k2am2.apps.googleusercontent.com">
-        <GoogleLogin
-          clientId="1069227459562-apu19fh635p21a78pdq4r4h96g5k2am2.apps.googleusercontent.com"
-          buttonText="Login with Google"
-          onSuccess={handleGoogleLoginSuccess}
-          onFailure={handleGoogleLoginFailure}
-          cookiePolicy="single_host_origin"
-        /></GoogleOAuthProvider>
+          <GoogleLogin
+            clientId="1069227459562-apu19fh635p21a78pdq4r4h96g5k2am2.apps.googleusercontent.com"
+            buttonText="Login with Google"
+            onSuccess={handleGoogleLoginSuccess}
+            onFailure={handleGoogleLoginFailure}
+            cookiePolicy="single_host_origin"
+          />
+        </GoogleOAuthProvider>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login

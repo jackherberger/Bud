@@ -30,15 +30,6 @@ function TransactionTable({ transactions, onAddTransaction }) {
   }
 
   const handleAddTransaction = () => {
-    const formattedDate = new Date(newTransaction.date).toLocaleDateString(
-      "en-US",
-      {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-      }
-    )
-
     onAddTransaction(newTransaction)
     setNewTransaction({
       name: "",

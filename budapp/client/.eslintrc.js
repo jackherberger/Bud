@@ -21,6 +21,7 @@ module.exports = {
   },
   plugins: ["react"],
   rules: {
+    "react/prop-types": "off",
     quotes: "off",
     semi: "off",
     "comma-dangle": "off",
