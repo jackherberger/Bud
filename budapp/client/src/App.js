@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import TransactionTable from "./TransactionTable";
+import React from "react"
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import TransactionTable from "./TransactionTable"
 // import CategoryPieChart from './CategoryPieChart';
-import "./App.css"; // Import your CSS file
-import Login from "./login";
-import SignUp from "./signup";
+import "./App.css" // Import your CSS file
+import Login from "./login"
+import SignUp from "./signup"
 
 function App() {
   return (
@@ -28,15 +28,12 @@ function App() {
         <Routes>
           <Route exact path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route
-            path="/transactions"
-            element={<TransactionTable/>}
-          />
+          <Route path="/transactions" element={<TransactionTable />} />
         </Routes>
       </Router>
       {/* <CategoryPieChart transactions={transactions} /> */}
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
