@@ -64,6 +64,7 @@ function TransactionTable({ transactions, onAddTransaction }) {
           name="category"
           value={newTransaction.category}
           onChange={handleInputChange}
+
         >
           {categories.map((category) => (
             <option key={category} value={category}>
@@ -71,6 +72,7 @@ function TransactionTable({ transactions, onAddTransaction }) {
             </option>
           ))}
         </select>
+// <<<<<<< front_end
         <button onClick={handleAddTransaction}>Add</button>
       </div>
       <table className="transaction-table">

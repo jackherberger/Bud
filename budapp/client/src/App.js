@@ -67,7 +67,6 @@ function App() {
     // Add the new transaction to your data state
     setTransactions([...transactions, newTransaction]);
   };
-
   return (
     <div className="App">
       <h1> Bud™️ </h1>
@@ -96,7 +95,7 @@ function App() {
         </Routes>
       </Router>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
