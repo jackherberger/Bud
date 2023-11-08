@@ -1,41 +1,52 @@
-import React, { useState } from 'react';
-import './TransactionTable.css';
+import React, { useState } from "react"
+import "./TransactionTable.css"
 
 function TransactionTable({ transactions, onAddTransaction }) {
   const categories = [
-    'Groceries', 'Clothes', 'Gas', 'Rent', 'Utilities', 'Entertainment', 'Electronics', 'Travel', 'Other'
-  ];
+    "Groceries",
+    "Clothes",
+    "Gas",
+    "Rent",
+    "Utilities",
+    "Entertainment",
+    "Electronics",
+    "Travel",
+    "Other",
+  ]
 
   const [newTransaction, setNewTransaction] = useState({
-    name: '',
-    price: '',
-    date: '',
+    name: "",
+    price: "",
+    date: "",
     category: categories[0], // Default category
-  });
+  })
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setNewTransaction({
       ...newTransaction,
       [name]: value,
-    });
-  };
+    })
+  }
 
   const handleAddTransaction = () => {
-    const formattedDate = new Date(newTransaction.date).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-    });
-    
-    onAddTransaction(newTransaction);
+    const formattedDate = new Date(newTransaction.date).toLocaleDateString(
+      "en-US",
+      {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      }
+    )
+
+    onAddTransaction(newTransaction)
     setNewTransaction({
-      name: '',
-      price: '',
-      date: '',
+      name: "",
+      price: "",
+      date: "",
       category: categories[0],
-    });
-  };
+    })
+  }
 
   return (
     <div>
@@ -64,7 +75,6 @@ function TransactionTable({ transactions, onAddTransaction }) {
           name="category"
           value={newTransaction.category}
           onChange={handleInputChange}
-
         >
           {categories.map((category) => (
             <option key={category} value={category}>
@@ -72,32 +82,31 @@ function TransactionTable({ transactions, onAddTransaction }) {
             </option>
           ))}
         </select>
-// <<<<<<< front_end
         <button onClick={handleAddTransaction}>Add</button>
       </div>
       <table className="transaction-table">
-      <thead>
-        <tr>
-          <th>Item</th>
-          <th>Price</th>
-          <th>Date</th>
-          <th>Category</th>
-        </tr>
-      </thead>
-      <tbody>
-        {transactions.map((transaction) => (
-          <tr key={transaction.id}>
-            <td>{transaction.name}</td>
-            <td>${transaction.price}</td>
-            <td>{transaction.date}</td>
-            <td>{transaction.category}</td>
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Price</th>
+            <th>Date</th>
+            <th>Category</th>
           </tr>
-        ))}
-      </tbody>
+        </thead>
+        <tbody>
+          {transactions.map((transaction) => (
+            <tr key={transaction.id}>
+              <td>{transaction.name}</td>
+              <td>${transaction.price}</td>
+              <td>{transaction.date}</td>
+              <td>{transaction.category}</td>
+            </tr>
+          ))}
+        </tbody>
         {/* ... Table headers and existing transactions */}
       </table>
     </div>
-  );
+  )
 }
 
-export default TransactionTable;
+export default TransactionTable
