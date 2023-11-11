@@ -78,10 +78,15 @@ app.patch('/account/:id/balance', async (req, res) => {
     const newBalance = req.body['balance'];
     console.log(req.body)
     const result = await AccountServices.editAccountBalance(id, newBalance);
-    if (result === undefined || result === null)
+    if (result["matchedCount"])
         res.status(404).send('Resource not found.');
+        
     else {
-        res.send({account_list: result});
+        if(result["upsertedCount"])
+          res.send({account_list: result});
+        else
+          res.send("Found but did not update")
+        
     }
   }catch(error){
     console.log(error);
@@ -99,10 +104,15 @@ app.patch('/account/:id/income', async (req, res) => {
     const newIncome = req.body['income'];
     console.log(req.body)
     const result = await AccountServices.editAccountIncome(id, newIncome);
-    if (result === undefined || result === null)
+    if (result["matchedCount"])
         res.status(404).send('Resource not found.');
+        
     else {
-        res.send({account_list: result});
+        if(result["upsertedCount"])
+          res.send({account_list: result});
+        else
+          res.send("Found but did not update")
+        
     }
   }catch(error){
     console.log(error);
@@ -121,13 +131,16 @@ app.patch('/account/:id/spending', async (req, res) => {
     const newSpending = req.body['spending'];
     console.log(req.body)
     const result = await AccountServices.editAccountSpending(id, newSpending);
-    if (result === undefined || result === null)
+    if (result["matchedCount"])
         res.status(404).send('Resource not found.');
+        
     else {
-        res.send({account_list: result});
+        if(result["upsertedCount"])
+          res.send({account_list: result});
+        else
+          res.send("Found but did not update")
     }
   }catch(error){
-    console.log(error);
     res.status(500)
       .send('An error ocurred in the server. Please check your req body for spending.')
       .end();
@@ -141,10 +154,15 @@ app.patch('/account/:id/saving', async (req, res) => {
     const newSaving = req.body['saving'];
     console.log(req.body)
     const result = await AccountServices.editAccountSavings(id, newSaving);
-    if (result === undefined || result === null)
+    if (result["matchedCount"])
         res.status(404).send('Resource not found.');
+        
     else {
-        res.send({account_list: result});
+        if(result["upsertedCount"])
+          res.send({account_list: result});
+        else
+          res.send("Found but did not update")
+        
     }
   }catch(error){
     console.log(error);
