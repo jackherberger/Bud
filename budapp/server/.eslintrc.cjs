@@ -25,5 +25,6 @@ module.exports = {
     semi: "off",
     "comma-dangle": "off",
     "space-before-function-paren": "off",
+    code: 120,
   },
 }
