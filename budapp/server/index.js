@@ -40,7 +40,7 @@ app.get('/account/:id', async (req, res) => {
   if (result === undefined || result === null)
       res.status(404).send('Resource not found.');
   else {
-      res.send({account_list: result});
+      res.send({account: result});
   }
 }
 );

@@ -6,6 +6,7 @@ import DateBarChart from "./DateBarChart"
 import "./App.css"
 import Login from "./login"
 import SignUp from "./signup"
+import AccountDisplay from "./components/account/account"
 
 function App() {
   useEffect(() => {
@@ -88,6 +89,7 @@ function App() {
               </div>
             }
           />
+          <Route path="/account" element={< AccountDisplay/>} />
         </Routes>
       </Router>
     </div>

@@ -61,5 +61,8 @@ docker cp <containerId>:/file/path/within/container /host/path/target
 //mongo restore
 mongorestore --username root --password rootpassword (dump folder)
 
+# check brew list
+brew services list
 # stop local mongo
 brew services stop mongodb-community
+
