@@ -11,5 +11,5 @@ services:
     volumes:
       - ./data:/data/db
       - ./mongorestore.sh:/docker-entrypoint-initdb.d/mongorestore.sh
-      - ./dumps/dump3:/db-dump
+      - ./dumps/dump4:/db-dump
 

@@ -1,1 +1,1 @@
-mongorestore -d mongo ./docker-entrypoint-initdb.d/db-dump -u root -p rootpassword
+mongorestore --username root --password rootpassword ./db-dump
