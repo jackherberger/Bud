@@ -78,15 +78,15 @@ app.patch('/account/:id/balance', async (req, res) => {
     const newBalance = req.body['balance'];
     console.log(req.body)
     const result = await AccountServices.editAccountBalance(id, newBalance);
-    if (result["matchedCount"])
+    if (!result["matchedCount"])
         res.status(404).send('Resource not found.');
         
     else {
-        if(result["upsertedCount"])
-          res.send({account_list: result});
-        else
-          res.send("Found but did not update")
-        
+        // if(result["upsertedCount"])
+        //   res.status().send({account_list: result});
+        // else
+        //   res.send("Found but did not update")
+        res.status(200).send({account_list: result});
     }
   }catch(error){
     console.log(error);
@@ -104,15 +104,15 @@ app.patch('/account/:id/income', async (req, res) => {
     const newIncome = req.body['income'];
     console.log(req.body)
     const result = await AccountServices.editAccountIncome(id, newIncome);
-    if (result["matchedCount"])
+    if (!result["matchedCount"])
         res.status(404).send('Resource not found.');
         
     else {
-        if(result["upsertedCount"])
-          res.send({account_list: result});
-        else
-          res.send("Found but did not update")
-        
+        // if(result["upsertedCount"])
+        //   res.send({account_list: result});
+        // else
+        //   res.send("Found but did not update")
+        res.status(200).send({account_list: result});
     }
   }catch(error){
     console.log(error);
@@ -154,14 +154,15 @@ app.patch('/account/:id/saving', async (req, res) => {
     const newSaving = req.body['saving'];
     console.log(req.body)
     const result = await AccountServices.editAccountSavings(id, newSaving);
-    if (result["matchedCount"])
+    if (!result["matchedCount"])
         res.status(404).send('Resource not found.');
         
     else {
-        if(result["upsertedCount"])
-          res.send({account_list: result});
-        else
-          res.send("Found but did not update")
+        // if(result["upsertedCount"])
+        //   res.send({account_list: result});
+        // else
+        //   res.send("Found but did not update")
+        res.status(200).send({account_list: result});
         
     }
   }catch(error){
