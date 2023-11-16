@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import bcrypt from "bcryptjs"
 import UserServices from "./models/userServices.js"
 import AccountServices from "./models/accountServices.js"
 
@@ -10,6 +11,9 @@ const users = await UserServices.getUsers();
 const savedCustomer = await UserServices.addCustomer("dude man", "plumper");
 
 const savedTransaction = await UserServices.addTransaction(100, "deposit", "today", "test");
+
+
+
 //console.log(savedUser);
 console.log(users);
 console.log(savedCustomer);
@@ -32,6 +36,35 @@ app.get('/users', async (req, res) => {
   const result = await UserServices.getUsers();
   res.send(result);
 });
+
+app.post('/checkLogin', async (req, res) => {
+  const { username, hashedPassword } = req.body;
+
+  try {
+    // Find the user in the MongoDB collection
+    const user = await UserServices.getUser(username);
+
+    if (user) {
+      // Compare the hashed password with the stored hashed password in the database
+      const passwordMatch = bcrypt.compareSync(hashedPassword, user.password);
+
+      if (passwordMatch) {
+        // Successful login
+        res.status(200).json({ message: 'Login successful' });
+      } else {
+        // Invalid password
+        res.status(401).json({ message: 'Invalid username or password' });
+      }
+    } else {
+      // User not found
+      res.status(401).json({ message: 'Invalid username or password' });
+    }
+  } catch (error) {
+    console.error('Error during login:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 
 //account stuff
 app.get('/account/:id', async (req, res) => {

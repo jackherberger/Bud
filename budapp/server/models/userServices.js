@@ -38,6 +38,13 @@ function getUsers() {
   return promise;
 }
 
+function getUser(email) {
+  let promise;
+  promise = UserModel.findOne({email})
+  console.log(promise)
+  return promise;
+}
+
 function addCustomer(name, job) {
   const customer = {
     name: name,
@@ -67,6 +74,6 @@ export default {
   getUsers,
   addCustomer,
   addTransaction,
- 
+  getUser,
   
 };

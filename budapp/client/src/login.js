@@ -17,13 +17,36 @@ const Login = () => {
     console.error("Google login failed:", error)
   }
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     const saltRounds = 8
     const hashedPassword = bcrypt.hashSync(password, saltRounds)
 
     console.log(
       `Logging in with username: ${username}, hashed password: ${hashedPassword}`
     )
+
+    try {
+      const response = fetch('http://localhost:8000/checkLogin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: username,
+          hashedPassword: hashedPassword,
+        }),
+      })
+
+      if (response.ok) {
+        // Successful login logic here
+        console.log('Login successful!')
+      } else {
+        // Failed login logic here
+        console.log('Login failed. Invalid username or password.')
+      }
+    } catch (error) {
+      console.error('Error during login:', error)
+    }
   }
 
   return (
