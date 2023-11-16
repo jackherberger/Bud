@@ -23,12 +23,12 @@ function ChartComponent({ data }) {
               label: "Amount",
               data: [data.balance, data.income, data.saving],
               backgroundColor: ["blue", "orange", "green"],
-              barThickness: 20, // Adjust bar width
+              barThickness: 80, // Adjust bar width
             },
           ],
         },
         options: {
-          indexAxis: "y", // Change orientation to horizontal
+          indexAxis: "x", // Change orientation to horizontal
           responsive: true,
           maintainAspectRatio: false,
           scales: {
@@ -48,7 +48,7 @@ function ChartComponent({ data }) {
   }, [data]);
 
   return (
-    <div style={{ width: "300px", margin: "20px" }}>
+    <div style={{ width: "500px", height: "250px", margin: "40px" }}>
       {" "}
       {/* Adjust width and margin */}
       <canvas ref={chartRef} />
