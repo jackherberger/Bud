@@ -1,5 +1,5 @@
-import React, { useState } from "react"
-import "./login.css"
+import React, { useState } from "react";
+import "./login.css";
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
@@ -8,17 +8,17 @@ const SignUp = () => {
     lastName: "",
     password: "",
     confirmPassword: "",
-  })
+  });
 
   const [error, setError] = useState('');
 
   const handleChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
-    })
-  }
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -126,7 +126,7 @@ const SignUp = () => {
         </button>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default SignUp
+export default SignUp;

@@ -1,9 +1,12 @@
+html,
+body {
+  height: 100%;
+}
 
-html, body {
-    height: 100%;
-  }
-  
-  body {
-    background: linear-gradient(180deg, #ffffff, #b0e0e6);
-    margin: 0; 
-  }
+body {
+  background: linear-gradient(180deg, #ffffff, #b0e0e6);
+  margin: 0;
+}
+/* div {
+  text-align: center;
+} */
