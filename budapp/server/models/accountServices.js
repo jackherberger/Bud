@@ -1,21 +1,22 @@
 /* eslint-disable require-jsdoc */
 import mongoose from "mongoose";
 import AccountModel from "./account.js";
-import { ObjectId, MongoClient, ServerApiVersion } from "mongodb";
-import dotenv from "dotenv";
-dotenv.config();
-
+import { ObjectId } from "mongodb";
 mongoose.set("debug", true);
-// const connectionString = `mongodb://localhost:27017/mongo`;
-const uri = process.env.MONGODB_URI_STRING;
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+const connectionString = `mongodb://localhost:27017/mongo`;
 
-mongoose.connect(uri).then(() => {
-  console.log('Connected to MongoDB');
+mongoose.connect(connectionString, {
+  authSource: "admin",
+  user: "root",
+  pass: "rootpassword",
 })
-.catch((err) => {
-  console.error('MongoDB connection error:', err);
-});
+    .then(() => {
+      console.log('Connected to MongoDB');
+    })
+    .catch((err) => {
+      console.error('MongoDB connection error:', err);
+    });
+
 
 
 function addAccount(balance, income, spending, saving) {

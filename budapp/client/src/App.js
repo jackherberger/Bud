@@ -8,6 +8,7 @@ import Login from "./login";
 import SignUp from "./signup";
 import Navbar from "./Navbar";
 import Home from "./Home";
+import AccountDisplay from "./components/account/account";
 
 function App() {
   const [transactions, setTransactions] = useState([]);
@@ -78,6 +79,7 @@ function App() {
               </div>
             }
           />
+          <Route path="/account" element={<AccountDisplay />} />
         </Routes>
       </Router>
     </div>
