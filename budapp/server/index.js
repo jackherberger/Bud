@@ -1,23 +1,28 @@
-import express from "express"
-import cors from "cors"
+import express from "express";
+import cors from "cors";
+import bcrypt from "bcryptjs"
 import UserServices from "./models/userServices.js"
 import AccountServices from "./models/accountServices.js"
+
+import dotenv from "dotenv";
+import userServices from "./models/userServices.js";
+dotenv.config();
 import TransactionServices from "./models/transactionServices.js"
 
 // these are tests to see if the database is working use as base for logic in the future
-const savedUser = await UserServices.addUser(
-  "dude",
-  "horse@gamil",
-  "ppopeede",
-  0
-)
-const users = await UserServices.getUsers()
+// const savedUser = await UserServices.addUser("dude", "horse@gamil", "ppopeede", 0);
+//const users = await UserServices.getUsers();
 
-const savedCustomer = await UserServices.addCustomer("dude man", "plumper")
+//const savedCustomer = await UserServices.addCustomer("dude man", "plumper");
+
+//const savedTransaction = await UserServices.addTransaction(100, "deposit", "today", "test");
+
+
 
 //console.log(savedUser);
-console.log(users)
-console.log(savedCustomer)
+//console.log(users);
+//console.log(savedCustomer);
+//console.log(savedTransaction);
 
 const PORT = 8000
 
@@ -54,6 +59,65 @@ app.post("/transactions", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" })
   }
 })
+
+app.post('/users', async (req, res) => {
+  const {name, email, password} = req.body;
+  try {
+    const existingUser = await userServices.getUserByEmail(email);
+
+  if (existingUser) {
+    // User already exists, return a 409 Conflict status
+    return res.status(409).json({ error: 'User already exists' });
+  }
+  } catch (error) {
+    console.error('Error during signup:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+
+  try {
+    const result = await UserServices.addUser(name, email, password, 0);
+    if (result)
+        res.status(201).send(result);
+    else
+        res.status(500).end();
+  } catch (error) {
+    console.error('Error during signup:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
+
+app.post('/checkLogin', async (req, res) => {
+  const { username, hashedPassword } = req.body;
+
+  try {
+    // Find the user in the MongoDB collection
+    const user = await UserServices.getUserByEmail(username);
+
+    if (user) {
+      // Compare the hashed password with the stored hashed password in the database
+      // const passwordMatch = bcrypt.compareSync(hashedPassword, user.password);
+      const passwordMatch = hashedPassword.localeCompare(user.password)
+      
+      if (passwordMatch == 0) {
+        // Successful login
+        // console.log("sucess")
+        res.status(200).json({ message: 'Login successful' });
+      } else {
+        // Invalid password
+        res.status(401).json({ message: 'password' });
+      }
+    } else {
+      // User not found
+      res.status(402).json({ message: 'Invalid' });
+    }
+  } catch (error) {
+    console.error('Error during login:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 
 //account stuff
 app.get("/account/:id", async (req, res) => {
