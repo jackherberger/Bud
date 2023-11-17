@@ -5,6 +5,7 @@ import UserServices from "./models/userServices.js"
 import AccountServices from "./models/accountServices.js"
 
 import dotenv from "dotenv";
+import userServices from "./models/userServices.js";
 dotenv.config();
 
 // these are tests to see if the database is working use as base for logic in the future
@@ -41,13 +42,25 @@ app.get('/users', async (req, res) => {
 app.post('/users', async (req, res) => {
   const {name, email, password} = req.body;
   try {
+    const existingUser = await userServices.getUserByEmail(email);
+
+  if (existingUser) {
+    // User already exists, return a 409 Conflict status
+    return res.status(409).json({ error: 'User already exists' });
+  }
+  } catch (error) {
+    console.error('Error during signup:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+
+  try {
     const result = await UserServices.addUser(name, email, password, 0);
     if (result)
         res.status(201).send(result);
     else
         res.status(500).end();
   } catch (error) {
-    console.error('Error during login:', error);
+    console.error('Error during signup:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
 });

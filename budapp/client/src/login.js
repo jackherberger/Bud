@@ -7,6 +7,8 @@ const Login = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
 
+  const [error, setError] = useState('');
+
   const handleGoogleLoginSuccess = (response) => {
     // Handle successful Google login
     console.log("Google login successful:", response)
@@ -43,15 +45,22 @@ const Login = () => {
         window.location.href = 'http://localhost:3000/transactions';
       } else {
         // Failed login logic here
+        setError('Login failed. Invalid username or password.');
         console.log('Login failed. Invalid username or password.')
       }
     } catch (error) {
+      setError('Login failed. Error occured try again later');
       console.error('Error during login:', error)
     }
   }
 
   return (
     <div>
+      {error && (
+      <div className="error-banner">
+        {error}
+      </div>
+      )}
       <h1>LOGIN TO BUD</h1>
       <form>
         <label>

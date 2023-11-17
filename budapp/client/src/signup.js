@@ -10,6 +10,8 @@ const SignUp = () => {
     confirmPassword: "",
   })
 
+  const [error, setError] = useState('');
+
   const handleChange = (e) => {
     const { name, value } = e.target
     setFormData({
@@ -40,6 +42,10 @@ const SignUp = () => {
       if (response.ok) {
         // Successful sign-up logic here
         console.log('User signed up successfully!');
+        window.location.href = 'http://localhost:3000/transactions';
+      } else if (response.status === 409) {
+        setError('Email already used. Please choose another email.');
+        console.log('User already exists');
       } else {
         // Failed sign-up logic here
         console.log('Sign-up failed. Please check your data.');
@@ -51,6 +57,11 @@ const SignUp = () => {
 
   return (
     <div>
+      {error && (
+        <div className="error-banner">
+          {error}
+        </div>
+      )}
       <h1>SIGN UP FOR BUD</h1>
       <form onSubmit={handleSubmit}>
         <label>
