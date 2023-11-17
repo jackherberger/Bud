@@ -86,7 +86,7 @@ const Login = () => {
         <br />
 
         {/* Google Login Button */}
-        <GoogleOAuthProvider clientId="1069227459562-apu19fh635p21a78pdq4r4h96g5k2am2.apps.googleusercontent.com">
+        {/* <GoogleOAuthProvider clientId="1069227459562-apu19fh635p21a78pdq4r4h96g5k2am2.apps.googleusercontent.com">
           <GoogleLogin
             clientId="1069227459562-apu19fh635p21a78pdq4r4h96g5k2am2.apps.googleusercontent.com"
             buttonText="Login with Google"
@@ -95,7 +95,7 @@ const Login = () => {
             cookiePolicy="single_host_origin"
             className="googleLoginButton"
           />
-        </GoogleOAuthProvider>
+        </GoogleOAuthProvider> */}
         <br />
       </form>
     </div>
