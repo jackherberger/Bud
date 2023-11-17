@@ -1,5 +1,5 @@
-import React, { useState } from "react"
-import "./login.css"
+import React, { useState } from "react";
+import "./login.css";
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
@@ -8,25 +8,25 @@ const SignUp = () => {
     lastName: "",
     password: "",
     confirmPassword: "",
-  })
+  });
 
   const handleChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
-    })
-  }
+    });
+  };
 
   const handleSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     // You can add your sign-up logic here, like sending the data to a server
-    console.log("Form data submitted:", formData)
-  }
+    console.log("Form data submitted:", formData);
+  };
 
   return (
     <div>
-      <h1>SIGN UP FOR BUD</h1>
+      <h1>Create your BUD Account</h1>
       <form onSubmit={handleSubmit}>
         <label>
           Email:
@@ -90,7 +90,7 @@ const SignUp = () => {
         </button>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default SignUp
+export default SignUp;
