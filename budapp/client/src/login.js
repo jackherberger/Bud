@@ -20,9 +20,6 @@ const Login = () => {
   }
 
   const handleLogin = async () => {
-    // const saltRounds = 8
-    // const hashedPassword = bcrypt.hashSync(password, saltRounds)
-
     console.log(
       `Logging in with username: ${username}, hashed password: ${password}`
     )
