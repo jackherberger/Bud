@@ -10,60 +10,44 @@ import Navbar from "./Navbar"
 import Home from "./Home"
 
 function App() {
-  useEffect(() => {
-    // Function to generate a random transaction
-    const generateRandomTransaction = (id) => {
-      const randomName = `Item ${id}`
-      const randomPrice = (Math.random() * 100).toFixed(2)
-      const year = 2023
-      const month = Math.floor(Math.random() * 12) + 1
-      const day = Math.floor(Math.random() * 28) + 1 // Choose any day within the month
-      const randomDate = `${year}-${month.toString().padStart(2, "0")}-${day
-        .toString()
-        .padStart(2, "0")}`
-      const categories = [
-        "Groceries",
-        "Clothes",
-        "Gas",
-        "Rent",
-        "Utilites",
-        "Enterntainment",
-        "Electronics",
-        "Travel",
-        "Other",
-      ]
-      const randomCategory =
-        categories[Math.floor(Math.random() * categories.length)]
+  const [transactions, setTransactions] = useState([])
 
-      return {
-        id,
-        name: randomName,
-        price: parseFloat(randomPrice),
-        date: randomDate,
-        category: randomCategory,
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/transactions")
+        const data = await response.json()
+        setTransactions(data)
+      } catch (error) {
+        console.error("Error fetching transactions:", error)
       }
     }
 
-    // Generate 10 random transactions
-    const randomTransactions = []
-    for (let id = 1; id <= 10; id++) {
-      randomTransactions.push(generateRandomTransaction(id))
-    }
-
-    setTransactions(randomTransactions)
-  }, []) // Empty dependency array to run this effect only once
-
-  const [transactions, setTransactions] = useState([])
+    fetchTransactions()
+  }, [])
 
   // const handleAddTransaction = (newTransaction) => {
   //   // Update the transactions array by adding the new transaction
   //   setTransactions([...transactions, newTransaction]);
   // };
 
-  const onAddTransaction = (newTransaction) => {
-    // Add the new transaction to your data state
-    setTransactions([...transactions, newTransaction])
+  const onAddTransaction = async (newTransaction) => {
+    try {
+      const response = await fetch("http://localhost:8000/transactions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newTransaction),
+      })
+
+      const data = await response.json()
+      setTransactions([...transactions, data])
+    } catch (error) {
+      console.error("Error adding transaction:", error)
+    }
   }
+
   return (
     <div className="App">
       <Router>
@@ -94,7 +78,6 @@ function App() {
               </div>
             }
           />
-          <Route path="/account" element={<AccountDisplay />} />
         </Routes>
       </Router>
     </div>

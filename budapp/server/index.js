@@ -46,17 +46,12 @@ app.get("/transactions", async (req, res) => {
 
 app.post("/transactions", async (req, res) => {
   try {
-    const { amount, category, date, description } = req.body
-    const result = await TransactionServices.addTransaction(
-      amount,
-      category,
-      date,
-      description
-    )
-    res.status(201).send(result)
+    const transaction = req.body
+    const result = await TransactionServices.addTransaction(transaction)
+    res.status(201).json(result)
   } catch (error) {
     console.error("Error adding transaction:", error)
-    res.status(500).send("Internal Server Error")
+    res.status(500).json({ error: "Internal Server Error" })
   }
 })
 
