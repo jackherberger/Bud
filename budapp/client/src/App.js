@@ -1,70 +1,60 @@
-import React, { useState, useEffect } from "react"
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
-import TransactionTable from "./TransactionTable"
-import CategoryPieChart from "./CategoryPieChart"
-import DateBarChart from "./DateBarChart"
-import "./App.css"
-import Login from "./login"
-import SignUp from "./signup"
-import AccountDisplay from "./components/account/account"
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import TransactionTable from "./TransactionTable";
+import CategoryPieChart from "./CategoryPieChart";
+import DateBarChart from "./DateBarChart";
+import "./App.css";
+import Login from "./login";
+import SignUp from "./signup";
+import Navbar from "./Navbar";
+import Home from "./Home";
+import AccountDisplay from "./components/account/account";
 
 function App() {
+  const [transactions, setTransactions] = useState([]);
+
   useEffect(() => {
-    // Function to generate a random transaction
-    const generateRandomTransaction = (id) => {
-      const randomName = `Item ${id}`
-      const randomPrice = (Math.random() * 100).toFixed(2)
-      const year = 2023
-      const month = Math.floor(Math.random() * 12) + 1
-      const day = Math.floor(Math.random() * 28) + 1 // Choose any day within the month
-      const randomDate = `${year}-${month.toString().padStart(2, "0")}-${day
-        .toString()
-        .padStart(2, "0")}`
-      const categories = [
-        "Groceries",
-        "Clothes",
-        "Gas",
-        "Rent",
-        "Utilites",
-        "Enterntainment",
-        "Electronics",
-        "Travel",
-        "Other",
-      ]
-      const randomCategory =
-        categories[Math.floor(Math.random() * categories.length)]
-
-      return {
-        id,
-        name: randomName,
-        price: parseFloat(randomPrice),
-        date: randomDate,
-        category: randomCategory,
+    const fetchTransactions = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/transactions");
+        const data = await response.json();
+        setTransactions(data);
+      } catch (error) {
+        console.error("Error fetching transactions:", error);
       }
+    };
+
+    fetchTransactions();
+  }, []);
+
+  // const handleAddTransaction = (newTransaction) => {
+  //   // Update the transactions array by adding the new transaction
+  //   setTransactions([...transactions, newTransaction]);
+  // };
+
+  const onAddTransaction = async (newTransaction) => {
+    try {
+      const response = await fetch("http://localhost:8000/transactions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newTransaction),
+      });
+
+      const data = await response.json();
+      setTransactions([...transactions, data]);
+    } catch (error) {
+      console.error("Error adding transaction:", error);
     }
+  };
 
-    // Generate 10 random transactions
-    const randomTransactions = []
-    for (let id = 1; id <= 10; id++) {
-      randomTransactions.push(generateRandomTransaction(id))
-    }
-
-    setTransactions(randomTransactions)
-  }, []) // Empty dependency array to run this effect only once
-
-  const [transactions, setTransactions] = useState([])
-
-  const onAddTransaction = (newTransaction) => {
-    // Add the new transaction to your data state
-    setTransactions([...transactions, newTransaction])
-  }
   return (
     <div className="App">
-      <h1> Bud™️ </h1>
-      <p>The smart transaction tracker.</p>
-
       <Router>
+        <Navbar />
         <Routes>
+          <Route exact path="/" element={<Home />}></Route>
           <Route exact path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route
@@ -89,11 +79,11 @@ function App() {
               </div>
             }
           />
-          <Route path="/account" element={< AccountDisplay/>} />
+          <Route path="/account" element={<AccountDisplay />} />
         </Routes>
       </Router>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

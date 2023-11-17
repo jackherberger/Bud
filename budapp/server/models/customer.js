@@ -31,7 +31,8 @@ const customerSchema = new mongoose.Schema(
       }
 
     },
-    {collection: "customer_list"}
+    {collection: "customer_list"},
+    { bufferTimeoutMS: 1000 }
 );
 
 const Customer = mongoose.model("Customer", customerSchema);

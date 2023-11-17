@@ -2,7 +2,14 @@
   text-align: center;
 }
 
-.App-logo {
+body {
+  margin: 0;
+  height: 100vh; /* Ensure the body takes up the full viewport height */
+  background: linear-gradient(180deg, #ffffff, #b0e0e6);
+  background-attachment: fixed;
+}
+
+/* .App-logo {
   height: 40vmin;
   pointer-events: none;
 }
@@ -27,7 +34,6 @@
 .App-link {
   color: #61dafb;
 }
-
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -35,4 +41,4 @@
   to {
     transform: rotate(360deg);
   }
-}
+}  */

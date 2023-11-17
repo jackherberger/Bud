@@ -1,5 +1,5 @@
-import React, { useState } from "react"
-import "./TransactionTable.css"
+import React, { useState } from "react";
+import "./TransactionTable.css";
 
 function TransactionTable({ transactions, onAddTransaction }) {
   const categories = [
@@ -12,32 +12,37 @@ function TransactionTable({ transactions, onAddTransaction }) {
     "Electronics",
     "Travel",
     "Other",
-  ]
+  ];
 
   const [newTransaction, setNewTransaction] = useState({
     name: "",
     price: "",
     date: "",
     category: categories[0], // Default category
-  })
+  });
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setNewTransaction({
       ...newTransaction,
       [name]: value,
-    })
-  }
+    });
+  };
 
-  const handleAddTransaction = () => {
-    onAddTransaction(newTransaction)
-    setNewTransaction({
-      name: "",
-      price: "",
-      date: "",
-      category: categories[0],
-    })
-  }
+  const handleAddTransaction = async () => {
+    try {
+      await onAddTransaction(newTransaction);
+
+      setNewTransaction({
+        name: "",
+        price: "",
+        date: "",
+        category: categories[0],
+      });
+    } catch (error) {
+      console.error("Error adding transaction:", error);
+    }
+  };
 
   return (
     <div>
@@ -97,7 +102,7 @@ function TransactionTable({ transactions, onAddTransaction }) {
         {/* ... Table headers and existing transactions */}
       </table>
     </div>
-  )
+  );
 }
 
-export default TransactionTable
+export default TransactionTable;
