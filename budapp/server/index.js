@@ -4,6 +4,9 @@ import bcrypt from "bcryptjs"
 import UserServices from "./models/userServices.js"
 import AccountServices from "./models/accountServices.js"
 
+import dotenv from "dotenv";
+dotenv.config();
+
 // these are tests to see if the database is working use as base for logic in the future
 // const savedUser = await UserServices.addUser("dude", "horse@gamil", "ppopeede", 0);
 //const users = await UserServices.getUsers();
@@ -18,8 +21,6 @@ import AccountServices from "./models/accountServices.js"
 //console.log(users);
 //console.log(savedCustomer);
 //console.log(savedTransaction);
-
-
 
 const PORT = 8000;
 
@@ -37,6 +38,22 @@ app.get('/users', async (req, res) => {
   res.send(result);
 });
 
+app.post('/users', async (req, res) => {
+  const {name, email, password} = req.body;
+  try {
+    const result = await UserServices.addUser(name, email, password, 0);
+    if (result)
+        res.status(201).send(result);
+    else
+        res.status(500).end();
+  } catch (error) {
+    console.error('Error during login:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
+
 app.post('/checkLogin', async (req, res) => {
   const { username, hashedPassword } = req.body;
 
@@ -46,18 +63,20 @@ app.post('/checkLogin', async (req, res) => {
 
     if (user) {
       // Compare the hashed password with the stored hashed password in the database
-      const passwordMatch = bcrypt.compareSync(hashedPassword, user.password);
-
-      if (passwordMatch) {
+      // const passwordMatch = bcrypt.compareSync(hashedPassword, user.password);
+      const passwordMatch = hashedPassword.localeCompare(user.password)
+      
+      if (passwordMatch == 0) {
         // Successful login
+        // console.log("sucess")
         res.status(200).json({ message: 'Login successful' });
       } else {
         // Invalid password
-        res.status(401).json({ message: 'Invalid username or password' });
+        res.status(401).json({ message: 'password' });
       }
     } else {
       // User not found
-      res.status(401).json({ message: 'Invalid username or password' });
+      res.status(402).json({ message: 'Invalid' });
     }
   } catch (error) {
     console.error('Error during login:', error);

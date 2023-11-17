@@ -2,33 +2,20 @@
 import mongoose from "mongoose";
 import AccountModel from "./account.js";
 import { ObjectId, MongoClient, ServerApiVersion } from "mongodb";
+import dotenv from "dotenv";
+dotenv.config();
+
 mongoose.set("debug", true);
 // const connectionString = `mongodb://localhost:27017/mongo`;
-const uri = "mongodb+srv://dbadmin:CPRootPassword@budcluster.lzrkphl.mongodb.net/?retryWrites=true&w=majority";
+const uri = process.env.MONGODB_URI_STRING;
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
+mongoose.connect(uri).then(() => {
+  console.log('Connected to MongoDB');
+})
+.catch((err) => {
+  console.error('MongoDB connection error:', err);
 });
-
-async function run() {
-  try {
-    // Connect the client to the server	(optional starting in v4.7)
-    await client.connect().then(()=>console.log('connected')).catch(e=>console.log(e));
-    // Send a ping to confirm a successful connection
-    await client.db("mongo").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
-  }
-}
-
-run().catch(console.dir);
 
 
 function addAccount(balance, income, spending, saving) {

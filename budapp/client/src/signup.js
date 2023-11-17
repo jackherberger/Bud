@@ -18,11 +18,36 @@ const SignUp = () => {
     })
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    // You can add your sign-up logic here, like sending the data to a server
-    console.log("Form data submitted:", formData)
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const comboName = formData.firstName + " " + formData.lastName
+    const email = formData.email
+    const pass = formData.confirmPassword
+
+    try {
+      const response = await fetch('http://localhost:8000/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: comboName,
+          email: email,
+          password: pass
+        }),
+      });
+
+      if (response.ok) {
+        // Successful sign-up logic here
+        console.log('User signed up successfully!');
+      } else {
+        // Failed sign-up logic here
+        console.log('Sign-up failed. Please check your data.');
+      }
+    } catch (error) {
+      console.error('Error during sign-up:', error);
+    }
+  };
 
   return (
     <div>

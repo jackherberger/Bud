@@ -18,28 +18,29 @@ const Login = () => {
   }
 
   const handleLogin = async () => {
-    const saltRounds = 8
-    const hashedPassword = bcrypt.hashSync(password, saltRounds)
+    // const saltRounds = 8
+    // const hashedPassword = bcrypt.hashSync(password, saltRounds)
 
     console.log(
-      `Logging in with username: ${username}, hashed password: ${hashedPassword}`
+      `Logging in with username: ${username}, hashed password: ${password}`
     )
 
     try {
-      const response = fetch('http://localhost:8000/checkLogin', {
+      const response = await fetch('http://localhost:8000/checkLogin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           username: username,
-          hashedPassword: hashedPassword,
+          hashedPassword: password,
         }),
       })
 
       if (response.ok) {
         // Successful login logic here
         console.log('Login successful!')
+        window.location.href = 'http://localhost:3000/transactions';
       } else {
         // Failed login logic here
         console.log('Login failed. Invalid username or password.')
