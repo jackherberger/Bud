@@ -1,30 +1,30 @@
-import React, { useState, useEffect } from "react"
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
-import TransactionTable from "./TransactionTable"
-import CategoryPieChart from "./CategoryPieChart"
-import DateBarChart from "./DateBarChart"
-import "./App.css"
-import Login from "./login"
-import SignUp from "./signup"
-import Navbar from "./Navbar"
-import Home from "./Home"
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import TransactionTable from "./TransactionTable";
+import CategoryPieChart from "./CategoryPieChart";
+import DateBarChart from "./DateBarChart";
+import "./App.css";
+import Login from "./login";
+import SignUp from "./signup";
+import Navbar from "./Navbar";
+import Home from "./Home";
 
 function App() {
-  const [transactions, setTransactions] = useState([])
+  const [transactions, setTransactions] = useState([]);
 
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
-        const response = await fetch("http://localhost:8000/transactions")
-        const data = await response.json()
-        setTransactions(data)
+        const response = await fetch("http://localhost:8000/transactions");
+        const data = await response.json();
+        setTransactions(data);
       } catch (error) {
-        console.error("Error fetching transactions:", error)
+        console.error("Error fetching transactions:", error);
       }
-    }
+    };
 
-    fetchTransactions()
-  }, [])
+    fetchTransactions();
+  }, []);
 
   // const handleAddTransaction = (newTransaction) => {
   //   // Update the transactions array by adding the new transaction
@@ -39,14 +39,14 @@ function App() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(newTransaction),
-      })
+      });
 
-      const data = await response.json()
-      setTransactions([...transactions, data])
+      const data = await response.json();
+      setTransactions([...transactions, data]);
     } catch (error) {
-      console.error("Error adding transaction:", error)
+      console.error("Error adding transaction:", error);
     }
-  }
+  };
 
   return (
     <div className="App">
@@ -81,7 +81,7 @@ function App() {
         </Routes>
       </Router>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
