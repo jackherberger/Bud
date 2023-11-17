@@ -1,24 +1,25 @@
 /* eslint-disable require-jsdoc */
-import mongoose from "mongoose";
-import UserModel from "./user.js";
-import CustomerModel from "./customer.js";
-import TransactionModel from "./transaction.js";
-import AccountModel from "./account.js";
+import mongoose from "mongoose"
+import UserModel from "./user.js"
+import CustomerModel from "./customer.js"
+import TransactionModel from "./transaction.js"
+import AccountModel from "./account.js"
 
-mongoose.set("debug", true);
-const connectionString = `mongodb://localhost:27017/mongo`;
+mongoose.set("debug", true)
+const connectionString = `mongodb://localhost:27017/mongo`
 
-mongoose.connect(connectionString, {
-  authSource: "admin",
-  user: "root",
-  pass: "rootpassword",
-})
-    .then(() => {
-      console.log('Connected to MongoDB');
-    })
-    .catch((err) => {
-      console.error('MongoDB connection error:', err);
-    });
+mongoose
+  .connect(connectionString, {
+    authSource: "admin",
+    user: "root",
+    pass: "rootpassword",
+  })
+  .then(() => {
+    console.log("Connected to MongoDB")
+  })
+  .catch((err) => {
+    console.error("MongoDB connection error:", err)
+  })
 
 function addUser(name, email, password, permissions) {
   const user = {
@@ -27,15 +28,15 @@ function addUser(name, email, password, permissions) {
     password: password,
     permissions: permissions,
   }
-  const userToAdd = new UserModel(user);
-  const promise = userToAdd.save();
-  return promise;
+  const userToAdd = new UserModel(user)
+  const promise = userToAdd.save()
+  return promise
 }
 
 function getUsers() {
-  let promise;
-  promise = UserModel.find();
-  return promise;
+  let promise
+  promise = UserModel.find()
+  return promise
 }
 
 function addCustomer(name, job) {
@@ -43,9 +44,9 @@ function addCustomer(name, job) {
     name: name,
     job: job,
   }
-  const customerToAdd = new CustomerModel(customer);
-  const promise = customerToAdd.save();
-  return promise;
+  const customerToAdd = new CustomerModel(customer)
+  const promise = customerToAdd.save()
+  return promise
 }
 
 function addTransaction(amount, category, date, description) {
@@ -55,18 +56,14 @@ function addTransaction(amount, category, date, description) {
     date: date,
     description: description,
   }
-  const transactionToAdd = new TransactionModel(transaction);
-  const promise = transactionToAdd.save();
-  return promise;
+  const transactionToAdd = new TransactionModel(transaction)
+  const promise = transactionToAdd.save()
+  return promise
 }
-
-
 
 export default {
   addUser,
   getUsers,
   addCustomer,
   addTransaction,
- 
-  
-};
+}
