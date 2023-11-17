@@ -1,0 +1,17 @@
+.signupButton {
+  background-color: #4caf50; /* Green color */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  /* Add any additional styles you want */
+}
+
+.signupButton:hover {
+  background-color: #45a049; /* Darker shade of green on hover */
+}

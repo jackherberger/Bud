@@ -7,7 +7,7 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const handleGoogleLoginSuccess = (response) => {
     // Handle successful Google login
@@ -22,42 +22,38 @@ const Login = () => {
   const handleLogin = async () => {
     console.log(
       `Logging in with username: ${username}, hashed password: ${password}`
-    )
+    );
 
     try {
-      const response = await fetch('http://localhost:8000/checkLogin', {
-        method: 'POST',
+      const response = await fetch("http://localhost:8000/checkLogin", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           username: username,
           hashedPassword: password,
         }),
-      })
+      });
 
       if (response.ok) {
         // Successful login logic here
-        console.log('Login successful!')
-        window.location.href = 'http://localhost:3000/transactions';
+        console.log("Login successful!");
+        window.location.href = "http://localhost:3000/transactions";
       } else {
         // Failed login logic here
-        setError('Login failed. Invalid username or password.');
-        console.log('Login failed. Invalid username or password.')
+        setError("Login failed. Invalid username or password.");
+        console.log("Login failed. Invalid username or password.");
       }
     } catch (error) {
-      setError('Login failed. Error occured try again later');
-      console.error('Error during login:', error)
+      setError("Login failed. Error occured try again later");
+      console.error("Error during login:", error);
     }
-  }
+  };
 
   return (
     <div>
-      {error && (
-      <div className="error-banner">
-        {error}
-      </div>
-      )}
+      {error && <div className="error-banner">{error}</div>}
       <h1>LOGIN TO BUD</h1>
       <form>
         <label>
@@ -82,9 +78,12 @@ const Login = () => {
           />
         </label>
         <br />
-        <button type="button" onClick={handleLogin}>
+        <br />
+        <button type="button" className="loginButton" onClick={handleLogin}>
           Login
         </button>
+        <br />
+        <br />
 
         {/* Google Login Button */}
         <GoogleOAuthProvider clientId="1069227459562-apu19fh635p21a78pdq4r4h96g5k2am2.apps.googleusercontent.com">
@@ -94,8 +93,10 @@ const Login = () => {
             onSuccess={handleGoogleLoginSuccess}
             onFailure={handleGoogleLoginFailure}
             cookiePolicy="single_host_origin"
+            className="googleLoginButton"
           />
         </GoogleOAuthProvider>
+        <br />
       </form>
     </div>
   );
