@@ -94,7 +94,6 @@ app.post('/checkLogin', async (req, res) => {
   try {
     // Find the user in the MongoDB collection
     const user = await UserServices.getUserByEmail(username);
-    console.log(user)
     if (user) {
       // Compare the hashed password with the stored hashed password in the database
       // const passwordMatch = bcrypt.compareSync(hashedPassword, user.password);
