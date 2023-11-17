@@ -29,14 +29,19 @@ function TransactionTable({ transactions, onAddTransaction }) {
     })
   }
 
-  const handleAddTransaction = () => {
-    onAddTransaction(newTransaction)
-    setNewTransaction({
-      name: "",
-      price: "",
-      date: "",
-      category: categories[0],
-    })
+  const handleAddTransaction = async () => {
+    try {
+      await onAddTransaction(newTransaction)
+
+      setNewTransaction({
+        name: "",
+        price: "",
+        date: "",
+        category: categories[0],
+      })
+    } catch (error) {
+      console.error("Error adding transaction:", error)
+    }
   }
 
   return (

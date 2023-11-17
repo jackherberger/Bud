@@ -71,8 +71,6 @@ async function addTransaction(amount, category, date, description) {
   return promise;
 }
 
-
-
 export default {
   addUser,
   getUsers,
