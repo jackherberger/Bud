@@ -5,19 +5,19 @@ import UserServices from "./models/userServices.js"
 import AccountServices from "./models/accountServices.js"
 
 // these are tests to see if the database is working use as base for logic in the future
-const savedUser = await UserServices.addUser("dude", "horse@gamil", "ppopeede", 0);
-const users = await UserServices.getUsers();
+// const savedUser = await UserServices.addUser("dude", "horse@gamil", "ppopeede", 0);
+//const users = await UserServices.getUsers();
 
-const savedCustomer = await UserServices.addCustomer("dude man", "plumper");
+//const savedCustomer = await UserServices.addCustomer("dude man", "plumper");
 
-const savedTransaction = await UserServices.addTransaction(100, "deposit", "today", "test");
+//const savedTransaction = await UserServices.addTransaction(100, "deposit", "today", "test");
 
 
 
 //console.log(savedUser);
-console.log(users);
-console.log(savedCustomer);
-console.log(savedTransaction);
+//console.log(users);
+//console.log(savedCustomer);
+//console.log(savedTransaction);
 
 
 
@@ -42,7 +42,7 @@ app.post('/checkLogin', async (req, res) => {
 
   try {
     // Find the user in the MongoDB collection
-    const user = await UserServices.getUser(username);
+    const user = await UserServices.getUserByEmail(username);
 
     if (user) {
       // Compare the hashed password with the stored hashed password in the database

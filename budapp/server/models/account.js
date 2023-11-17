@@ -31,7 +31,8 @@ const AccountSchema = new mongoose.Schema(
       },
 
     },
-    {collection: "accounts_list"}
+    {collection: "accounts_list"},
+    { bufferTimeoutMS: 1000 }
 );
 
 const Account = mongoose.model("Account", AccountSchema);

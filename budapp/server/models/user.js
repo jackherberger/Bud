@@ -38,7 +38,8 @@ const UserSchema = new mongoose.Schema(
         ref: "Customer",
       },
     },
-    {collection: "users_list"}
+    {collection: "users_list"},
+    { bufferTimeoutMS: 1000 }
 );
 
 const User = mongoose.model("User", UserSchema);

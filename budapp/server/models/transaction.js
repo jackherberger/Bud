@@ -28,7 +28,8 @@ const transactionSchema = new mongoose.Schema(
         },
 
     },
-    { collection: "transaction_list" }
+    { collection: "transaction_list" },
+    { bufferTimeoutMS: 1000 }
     );
 const Transaction = mongoose.model("Transaction", transactionSchema);
 
