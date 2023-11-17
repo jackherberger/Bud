@@ -41,7 +41,6 @@ async function getUsers() {
 async function getUserByEmail(email) {
   try {
     const user = await UserModel.findOne({email});
-    console.log(user)
     return user;
   } catch (error) {
     console.error('Error fetching user by email:', error);
