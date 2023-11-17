@@ -1,5 +1,27 @@
 {
   "dependencies": {
     "react-router-dom": "^6.18.0"
-  }
+  },
+  "name": "bud",
+  "description": "Bud - CSC307 Final Project",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start server": "nodemon -w server index.js",
+    "start client": "nodemon -w client index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jackherberger/Bud.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jackherberger/Bud/issues"
+  },
+  "homepage": "https://github.com/jackherberger/Bud#readme",
+  "workspaces":[
+    "budapp/*"
+  ]
 }
