@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import ChartComponent from "./ChartComponent";
 import "./AccountDisplay.css";
 
-function AccountDisplay() {
-  const accountId = "654f1da3a472ccdb5403c95d"; // sample id
+function AccountDisplay(props) {
+  const accountId = props.accountId; // sample id
   const [info, setInfo] = useState({
     balance: 0,
     income: 0,

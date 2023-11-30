@@ -251,3 +251,13 @@ app.patch("/account/:id/saving", async (req, res) => {
     return
   }
 })
+
+app.get("/customer/:id", async (req, res) => {
+  const id = req.params["id"]
+  const result = await CustomerServices.getCustomerInfo(id)
+  if (result === undefined || result === null)
+    res.status(404).send("Resource not found.")
+  else {
+    res.send({ customer: result })
+  }
+})

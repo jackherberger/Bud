@@ -3,10 +3,15 @@ import mongoose from "mongoose"
 import AccountModel from "./account.js"
 import CustomerModel from "./customer.js"
 import UserModel from "./user.js"
-
+import { ObjectId } from "mongodb";
 mongoose.set("debug", true)
 const connectionString = `mongodb://localhost:27017/mongo`
 
+async function getCustomerInfo(customerId) {
+  customerId = new ObjectId(customerId)
+  const promise = CustomerModel.findOne({ _id: customerId })
+  return promise
+}
 async function addCustomer() {
     const customerToAdd = new CustomerModel()
     const promise = await customerToAdd.save()
@@ -39,4 +44,5 @@ export default {
     attachAccountToCustomer,
     attachCustomerToUser,
     addCustomer,
+    getCustomerInfo,
 }

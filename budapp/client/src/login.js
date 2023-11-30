@@ -35,10 +35,19 @@ const Login = (props) => {
           hashedPassword: password,
         }),
       });
-      console.log("response:", response);
       const customerId = await response.json().then((data) => data.customer);
       props.setCustomerId(customerId);
-      console.log("customerId: set", customerId);
+
+      // const response2 = await fetch(`http://localhost:8000/customer/:id`, {
+      //   method: "GET",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      // });
+      // const customerInfo = await response2.json().then((data) => data);
+
+      // props.setAccountId(customerInfo.account);
+      // console.log("customerId: set", customerId);
       if (response.ok) {
         // Successful login logic here
         console.log("Login successful!");

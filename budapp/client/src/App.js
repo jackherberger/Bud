@@ -9,31 +9,33 @@ import SignUp from "./signup";
 import Navbar from "./Navbar";
 import Home from "./Home";
 import AccountDisplay from "./components/account/account";
+import { set } from "mongoose";
 
 function App() {
   const [transactions, setTransactions] = useState([]);
   const [customerId, setCustomerId] = useState([]);
-
+  const [accountId, setAccountId] = useState([]);
+  // fetch customer info once login
   useEffect(() => {
-    const fetchTransactions = async () => {
+    const fetchCustomerInfo = async () => {
       try {
         console.log("in trans customerId:", customerId)
         const response = await fetch(`http://localhost:8000/transactions/${customerId}`);
-        const data = await response.json().then((data) => { return data }).then(res => { return res[0].transaction_list });
-        setTransactions(data);
+        const data = await response.json().then((data) => { return data }).then(res => { return res[0] });
+        setTransactions(data.transaction_list);
+        setAccountId(data.account);
       } catch (error) {
         console.error("Error fetching transactions:", error);
       }
     };
 
-    fetchTransactions();
+    fetchCustomerInfo();
   }, [customerId]);
 
   // const handleAddTransaction = (newTransaction) => {
   //   // Update the transactions array by adding the new transaction
   //   setTransactions([...transactions, newTransaction]);
   // };
-
   const onAddTransaction = async (newTransaction) => {
     try {
       const response = await fetch(`http://localhost:8000/transactions/${customerId}`, {
@@ -56,13 +58,18 @@ function App() {
     setCustomerId(customerId);
     console.log("ran in app", customerId);
   }
+
+  const onSetAccountId = (accountId) => {
+    setAccountId(accountId);
+    console.log("ran in app", accountId);
+  }
   return (
     <div className="App">
       <Router>
         <Navbar />
         <Routes>
           <Route exact path="/" element={<Home />}></Route>
-          <Route exact path="/login" element={<Login setCustomerId={onSetCustomerId}/>} />
+          <Route exact path="/login" element={<Login setCustomerId={onSetCustomerId} setAccountId={onSetAccountId}/>} />
           <Route path="/signup" element={<SignUp />} />
           <Route
             path="/transactions"
@@ -88,7 +95,7 @@ function App() {
             }
           />
           <Route path="/account" element={<AccountDisplay />}
-            customerId={customerId}
+            accountId={accountId}
           />
         </Routes>
       </Router>
