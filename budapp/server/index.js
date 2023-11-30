@@ -9,20 +9,7 @@ import userServices from "./models/userServices.js";
 dotenv.config();
 import TransactionServices from "./models/transactionServices.js"
 
-// these are tests to see if the database is working use as base for logic in the future
-// const savedUser = await UserServices.addUser("dude", "horse@gamil", "ppopeede", 0);
-//const users = await UserServices.getUsers();
 
-//const savedCustomer = await UserServices.addCustomer("dude man", "plumper");
-
-//const savedTransaction = await UserServices.addTransaction(100, "deposit", "today", "test");
-
-
-
-//console.log(savedUser);
-//console.log(users);
-//console.log(savedCustomer);
-//console.log(savedTransaction);
 
 const PORT = 8000
 
@@ -167,10 +154,6 @@ app.patch("/account/:id/balance", async (req, res) => {
     const result = await AccountServices.editAccountBalance(id, newBalance)
     if (!result["matchedCount"]) res.status(404).send("Resource not found.")
     else {
-      // if(result["upsertedCount"])
-      //   res.status().send({account_list: result});
-      // else
-      //   res.send("Found but did not update")
       res.status(200).send({ account_list: result })
     }
   } catch (error) {

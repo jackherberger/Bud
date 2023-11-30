@@ -5,20 +5,6 @@ import { ObjectId } from "mongodb";
 mongoose.set("debug", true);
 const connectionString = `mongodb://localhost:27017/mongo`;
 
-mongoose.connect(connectionString, {
-  authSource: "admin",
-  user: "root",
-  pass: "rootpassword",
-})
-    .then(() => {
-      console.log('Connected to MongoDB');
-    })
-    .catch((err) => {
-      console.error('MongoDB connection error:', err);
-    });
-
-
-
 function addAccount(balance, income, spending, saving) {
   const account = {
     balance: balance,

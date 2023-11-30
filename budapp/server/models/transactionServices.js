@@ -5,18 +5,7 @@ import TransactionModel from "./transaction.js"
 mongoose.set("debug", true)
 const connectionString = `mongodb://localhost:27017/mongo`
 
-mongoose
-  .connect(connectionString, {
-    authSource: "admin",
-    user: "root",
-    pass: "rootpassword",
-  })
-  .then(() => {
-    console.log("Connected to MongoDB")
-  })
-  .catch((err) => {
-    console.error("MongoDB connection error:", err)
-  })
+
 
 async function addTransaction(transaction) {
   try {
