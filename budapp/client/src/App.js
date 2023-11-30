@@ -12,12 +12,14 @@ import AccountDisplay from "./components/account/account";
 
 function App() {
   const [transactions, setTransactions] = useState([]);
+  const [customerId, setCustomerId] = useState([]);
 
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
-        const response = await fetch("http://localhost:8000/transactions");
-        const data = await response.json();
+        console.log("in trans customerId:", customerId)
+        const response = await fetch(`http://localhost:8000/transactions/${customerId}`);
+        const data = await response.json().then((data) => { return data }).then(res => { return res[0].transaction_list });
         setTransactions(data);
       } catch (error) {
         console.error("Error fetching transactions:", error);
@@ -25,7 +27,7 @@ function App() {
     };
 
     fetchTransactions();
-  }, []);
+  }, [customerId]);
 
   // const handleAddTransaction = (newTransaction) => {
   //   // Update the transactions array by adding the new transaction
@@ -34,7 +36,7 @@ function App() {
 
   const onAddTransaction = async (newTransaction) => {
     try {
-      const response = await fetch("http://localhost:8000/transactions", {
+      const response = await fetch(`http://localhost:8000/transactions/${customerId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -42,20 +44,25 @@ function App() {
         body: JSON.stringify(newTransaction),
       });
 
-      const data = await response.json();
-      setTransactions([...transactions, data]);
+      const data = await response.json().then((data) => { return data }).then(res => { return res.transaction_list });
+      console.log("data", data);
+      setTransactions(data);
     } catch (error) {
       console.error("Error adding transaction:", error);
     }
   };
 
+  const onSetCustomerId = (customerId) => {
+    setCustomerId(customerId);
+    console.log("ran in app", customerId);
+  }
   return (
     <div className="App">
       <Router>
         <Navbar />
         <Routes>
           <Route exact path="/" element={<Home />}></Route>
-          <Route exact path="/login" element={<Login />} />
+          <Route exact path="/login" element={<Login setCustomerId={onSetCustomerId}/>} />
           <Route path="/signup" element={<SignUp />} />
           <Route
             path="/transactions"
@@ -65,6 +72,7 @@ function App() {
                   <TransactionTable
                     transactions={transactions}
                     onAddTransaction={onAddTransaction}
+                    customerId={customerId}
                   />
                 </div>
                 <div style={{ flex: 1 }}>
@@ -79,7 +87,9 @@ function App() {
               </div>
             }
           />
-          <Route path="/account" element={<AccountDisplay />} />
+          <Route path="/account" element={<AccountDisplay />}
+            customerId={customerId}
+          />
         </Routes>
       </Router>
     </div>

@@ -8,8 +8,7 @@ import dotenv from "dotenv";
 import userServices from "./models/userServices.js";
 dotenv.config();
 import TransactionServices from "./models/transactionServices.js"
-
-
+import CustomerServices from "./models/customerServices.js";
 
 const PORT = 8000
 
@@ -26,9 +25,10 @@ app.get("/users", async (req, res) => {
   res.send(result)
 })
 
-app.get("/transactions", async (req, res) => {
+app.get("/transactions/:id", async (req, res) => {
   try {
-    const transactions = await TransactionServices.getTransactions()
+    const id = req.params["id"]
+    const transactions = await TransactionServices.getTransactions(id)
     res.send(transactions)
   } catch (error) {
     console.error("Error getting transactions:", error)
@@ -36,10 +36,11 @@ app.get("/transactions", async (req, res) => {
   }
 })
 
-app.post("/transactions", async (req, res) => {
+app.post("/transactions/:id", async (req, res) => {
   try {
+    const id = req.params["id"]
     const transaction = req.body
-    const result = await TransactionServices.addTransaction(transaction)
+    const result = await TransactionServices.addTransaction(transaction,id)
     res.status(201).json(result)
   } catch (error) {
     console.error("Error adding transaction:", error)
@@ -51,6 +52,7 @@ app.post('/users', async (req, res) => {
   const {name, email, password} = req.body;
   try {
     const existingUser = await userServices.getUserByEmail(email);
+    
 
   if (existingUser) {
     // User already exists, return a 409 Conflict status
@@ -62,7 +64,14 @@ app.post('/users', async (req, res) => {
   }
 
   try {
+    // Create a new user
+    const newaccount = await AccountServices.addAccount(0, 0, 0, 0);
+    //treat as new customer for now
+    const newcustomer = await CustomerServices.addCustomer();
     const result = await UserServices.addUser(name, email, password, 0);
+    // now attach them
+    const attachaccount = await CustomerServices.attachAccountToCustomer(newaccount._id, newcustomer._id);
+    const attachcustomer = await CustomerServices.attachCustomerToUser(newcustomer._id, result._id);
     if (result)
         res.status(201).send(result);
     else
@@ -90,7 +99,8 @@ app.post('/checkLogin', async (req, res) => {
       if (passwordMatch == 0) {
         // Successful login
         // console.log("sucess")
-        res.status(200).json({ message: 'Login successful' });
+        
+        res.status(200).send(user);
       } else {
         // Invalid password
         res.status(401).json({ message: 'password' });
