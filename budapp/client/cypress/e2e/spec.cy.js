@@ -61,3 +61,8 @@ describe("The signup page", () => {
     cy.get('button[value="signup"]').click();
   });
 });
+
+describe("The account page", () => {
+  const accountdata = {};
+  cy.visit("http://localhost:3000/account");
+});
