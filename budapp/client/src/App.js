@@ -13,8 +13,8 @@ import { set } from "mongoose";
 
 function App() {
   const [transactions, setTransactions] = useState([]);
-  const [customerId, setCustomerId] = useState([]);
-  const [accountId, setAccountId] = useState([]);
+  const [customerId, setCustomerId] = useState("");
+  const [accountId, setAccountId] = useState("parent");
   // fetch customer info once login
   useEffect(() => {
     const fetchCustomerInfo = async () => {
@@ -23,13 +23,16 @@ function App() {
         const response = await fetch(`http://localhost:8000/transactions/${customerId}`);
         const data = await response.json().then((data) => { return data }).then(res => { return res[0] });
         setTransactions(data.transaction_list);
-        setAccountId(data.account);
+        onSetAccountId(data.account);
       } catch (error) {
         console.error("Error fetching transactions:", error);
       }
     };
 
     fetchCustomerInfo();
+    if (customerId) {
+      console.log("logged in", customerId, accountId)
+    }
   }, [customerId]);
 
   // const handleAddTransaction = (newTransaction) => {
@@ -94,8 +97,7 @@ function App() {
               </div>
             }
           />
-          <Route path="/account" element={<AccountDisplay />}
-            accountId={accountId}
+          <Route path="/account" element={<AccountDisplay accountId={accountId}/>}
           />
         </Routes>
       </Router>

@@ -3,7 +3,7 @@ import ChartComponent from "./ChartComponent";
 import "./AccountDisplay.css";
 
 function AccountDisplay(props) {
-  const accountId = props.accountId; // sample id
+  const accountId = "654f1da3a472ccdb5403c95d"; // sample id
   const [info, setInfo] = useState({
     balance: 0,
     income: 0,
@@ -14,7 +14,7 @@ function AccountDisplay(props) {
   const [selectedAccount, setSelectedAccount] = useState("balance");
 
   function getInfo() {
-    fetch("http://localhost:8000/account/" + accountId)
+    fetch("http://localhost:8000/account/" + props.accountId)
       .then((res) => res.json())
       .then((json) => setInfo(json.account[0]))
       .catch((error) => {
@@ -30,7 +30,7 @@ function AccountDisplay(props) {
       newAmount = info[selectedAccount] - amount;
     }
 
-    fetch(`http://localhost:8000/account/${accountId}/${selectedAccount}`, {
+    fetch(`http://localhost:8000/account/${props.accountId}/${selectedAccount}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
