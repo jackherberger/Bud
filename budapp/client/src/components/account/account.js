@@ -65,12 +65,14 @@ function AccountDisplay() {
       <div className="input-container">
         <input
           type="number"
+          name="dollars"
           value={amount}
           onChange={(e) => setAmount(parseInt(e.target.value))}
           className="amount-input"
         />
         <select
           value={transactionType}
+          name="transactionoption"
           onChange={(e) => setTransactionType(e.target.value)}
           className="transaction-select"
         >
@@ -79,6 +81,7 @@ function AccountDisplay() {
         </select>
         <select
           value={selectedAccount}
+          name="accountoption"
           onChange={(e) => setSelectedAccount(e.target.value)}
           className="account-select"
         >
@@ -87,6 +90,7 @@ function AccountDisplay() {
           <option value="saving">Savings</option>
         </select>
         <button
+          value="deposit"
           onClick={() => updateAccount(transactionType)}
           className={`update-button ${
             transactionType === "+" ? "deposit" : "withdraw"

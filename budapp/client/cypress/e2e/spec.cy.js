@@ -34,7 +34,7 @@ describe("The login page + transaction page", () => {
     cy.get('input[name="price"]').type(transactiondata.price);
     cy.get('input[name="date"]').type(transactiondata.date);
     cy.get('select[name="category"]').type(transactiondata.category);
-    cy.get('button[value="Add"]').click();
+    cy.get('button[value="Add"]').click({ force: true });
     cy.get("tbody > tr:last-child > td:first-of-type").should(
       "contain",
       transactiondata.name
@@ -45,7 +45,7 @@ describe("The login page + transaction page", () => {
 describe("The signup page", () => {
   // this data will need to be changed after each test
   const signupdata = {
-    email: "iloo@calpoly.edu",
+    email: "iloo12345567@calpoly.edu",
     firstName: "Ian",
     lastName: "Loo",
     password: "igloo12345",
@@ -59,10 +59,24 @@ describe("The signup page", () => {
     cy.get('input[name="password"]').type(signupdata.password);
     cy.get('input[name="confirmPassword"]').type(signupdata.confirmPassword);
     cy.get('button[value="signup"]').click();
+    cy.url().should("include", "/transactions");
   });
 });
 
 describe("The account page", () => {
-  const accountdata = {};
-  cy.visit("http://localhost:3000/account");
+  const accountdata = {
+    amount: 12,
+    transactionoption: "+",
+    accountoption: "income",
+  };
+  it("let's us add to the account income", () => {
+    cy.visit("http://localhost:3000/account");
+    cy.get('input[name="dollars"]').type(accountdata.amount);
+    cy.get('select[name="transactionoption"]').type(
+      accountdata.transactionoption
+    );
+    cy.get('select[name="accountoption"').type(accountdata.accountoption);
+    cy.get('button[value="deposit"]').should("contain", accountdata.amount);
+    cy.get('button[value="deposit"]').click();
+  });
 });
