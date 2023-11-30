@@ -1,5 +1,7 @@
-import React, { useState } from "react";
-import "./TransactionTable.css";
+import React, { useState } from "react"
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import "./TransactionTable.css"
 
 function TransactionTable({ transactions, onAddTransaction }) {
   const categories = [
@@ -19,7 +21,9 @@ function TransactionTable({ transactions, onAddTransaction }) {
     price: "",
     date: "",
     category: categories[0], // Default category
-  });
+  })
+
+  const [startDate, setStartDate] = useState(new Date());
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -61,11 +65,17 @@ function TransactionTable({ transactions, onAddTransaction }) {
           value={newTransaction.price}
           onChange={handleInputChange}
         />
-        <input
-          type="date"
-          name="date"
-          value={newTransaction.date}
-          onChange={handleInputChange}
+        <DatePicker
+          selected={newTransaction.date ? new Date(newTransaction.date) : null}
+          onChange={(date) => {
+            const formattedDate = date.toISOString().split('T')[0];
+            setNewTransaction({
+              ...newTransaction,
+              date: formattedDate,
+            });
+          }}
+
+          placeholderText="Select Date"
         />
         <select
           name="category"
