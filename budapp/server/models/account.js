@@ -1,38 +1,38 @@
 import mongoose from "mongoose";
+// const mongoose = require("mongoose");
 
 const AccountSchema = new mongoose.Schema(
-    {
-      balance: {
-        type: Number,
-        required: true,
-        trim: true,
-      },
-      income: {
-        type: Number,
-        required: true,
-        trim: true,
-      },
-
-      spending: {
-        type: Number,
-        required: true,
-        trim: true,
-      },
-
-      saving: {
-        type: Number,
-        required: true,
-        trim: true,
-      },
-
-      assets: {
-        type: Map,
-        of: String,
-      },
-
+  {
+    balance: {
+      type: Number,
+      required: true,
+      trim: true,
     },
-    {collection: "accounts_list"},
-    { bufferTimeoutMS: 1000 }
+    income: {
+      type: Number,
+      required: true,
+      trim: true,
+    },
+
+    spending: {
+      type: Number,
+      required: true,
+      trim: true,
+    },
+
+    saving: {
+      type: Number,
+      required: true,
+      trim: true,
+    },
+
+    assets: {
+      type: Map,
+      of: String,
+    },
+  },
+  { collection: "accounts_list" },
+  { bufferTimeoutMS: 1000 }
 );
 
 const Account = mongoose.model("Account", AccountSchema);

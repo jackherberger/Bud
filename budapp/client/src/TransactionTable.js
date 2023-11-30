@@ -78,7 +78,9 @@ function TransactionTable({ transactions, onAddTransaction }) {
             </option>
           ))}
         </select>
-        <button onClick={handleAddTransaction}>Add</button>
+        <button value="Add" onClick={handleAddTransaction}>
+          Add
+        </button>
       </div>
       <table className="transaction-table">
         <thead>
