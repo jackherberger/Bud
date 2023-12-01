@@ -209,10 +209,9 @@ app.patch("/account/:id/spending", async (req, res) => {
     const newSpending = req.body["spending"]
     console.log(req.body)
     const result = await AccountServices.editAccountSpending(id, newSpending)
-    if (result["matchedCount"]) res.status(404).send("Resource not found.")
+    if (!result["matchedCount"]) res.status(404).send("Resource not found.")
     else {
-      if (result["upsertedCount"]) res.send({ account_list: result })
-      else res.send("Found but did not update")
+      res.status(200).send({ account_list: result })
     }
   } catch (error) {
     res
@@ -258,5 +257,25 @@ app.get("/customer/:id", async (req, res) => {
     res.status(404).send("Resource not found.")
   else {
     res.send({ customer: result })
+  }
+})
+
+app.get("/account/:id/balance", async (req, res) => {
+  const accountId = req.params.id
+
+  try {
+    // Call the service function to get the account information
+    const accountInfo = await AccountServices.getAccountInfo(accountId)
+
+    // Check if the account information is found
+    if (accountInfo.length === 0) {
+      return res.status(404).send("Account not found.")
+    }
+
+    // Send the account balance in the response
+    res.status(200).json({ balance: accountInfo[0].balance })
+  } catch (error) {
+    console.error("Error getting account balance:", error)
+    res.status(500).send("Internal Server Error")
   }
 })

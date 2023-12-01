@@ -3,7 +3,6 @@ import ChartComponent from "./ChartComponent"
 import "./AccountDisplay.css"
 
 function AccountDisplay(props) {
-  const accountId = "654f1da3a472ccdb5403c95d" // sample id
   const [info, setInfo] = useState({
     balance: 0,
     income: 0,
@@ -11,57 +10,45 @@ function AccountDisplay(props) {
     spending: 0,
   })
   const [amount, setAmount] = useState(0)
-  const [transactionType, setTransactionType] = useState("+") // + for deposit, - for withdraw
+  const [transactionType, setTransactionType] = useState("+") // + for deposit, - for withdr
   const [selectedAccount, setSelectedAccount] = useState("balance")
 
   const adjustedBalance = info.balance - info.spending
 
-  function getInfo() {
-    fetch("http://localhost:8000/account/" + props.accountId)
-      .then((res) => res.json())
-      .then((json) => {
-        setInfo(json.account[0])
-        console.log(json)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+  useEffect(() => {
+    console.log("useEffect in AccountDisplay triggered")
+    getInfo()
+  }, [props.accountId, props.customerId])
 
-    fetch("http://localhost:8000/transactions/" + props.customerId)
-      .then((res) => res.json())
-      .then((transactions) => {
+  function getInfo() {
+    Promise.all([
+      fetch("http://localhost:8000/account/" + props.accountId).then((res) =>
+        res.json()
+      ),
+      fetch("http://localhost:8000/transactions/" + props.customerId).then(
+        (res) => res.json()
+      ),
+    ])
+      .then(([accountData, transactions]) => {
+        // Extract necessary data from the responses
+        const accountInfo = accountData.account[0]
+        console.log(accountInfo)
         const spendingList = transactions[0].transaction_list
+        console.log(transactions)
+        // Calculate total spending
         const totalSpending = spendingList.reduce(
           (acc, transaction) => acc + parseInt(transaction.price, 10),
           0
         )
-        console.log(totalSpending)
-        updateInDatabase(totalSpending)
+        accountInfo.spending = totalSpending
+
+        accountInfo.balance -= totalSpending
+
+        // Update state or perform other actions with the data
+        setInfo(accountInfo)
       })
       .catch((error) => {
         console.log(error)
-      })
-  }
-
-  function updateInDatabase(spending) {
-    fetch(`http://localhost:8000/account/${props.accountId}/spending`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        spending: spending.toFixed(),
-      }),
-    })
-      .then((res) => {
-        if (res.ok) {
-          console.log("Total spending updated successfully")
-        } else {
-          console.log("Failed to update total spending")
-        }
-      })
-      .catch((error) => {
-        console.error("Error updating total spending:", error)
       })
   }
 
@@ -87,6 +74,8 @@ function AccountDisplay(props) {
     )
       .then((res) => {
         if (res.ok) {
+          console.log(selectedAccount)
+          console.log(props.accountId)
           setInfo({ ...info, [selectedAccount]: newAmount })
           setAmount(0)
         }
@@ -95,10 +84,6 @@ function AccountDisplay(props) {
         console.log(error)
       })
   }
-
-  useEffect(() => {
-    getInfo()
-  }, [])
 
   return (
     <React.Fragment>
@@ -144,7 +129,12 @@ function AccountDisplay(props) {
         </button>
       </div>
       <div className="chart-container">
-        <ChartComponent data={info} />
+        <ChartComponent
+          balance={adjustedBalance}
+          income={info.income}
+          savings={info.saving}
+          spendings={info.spending}
+        />
       </div>
     </React.Fragment>
   )

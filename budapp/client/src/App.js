@@ -15,6 +15,7 @@ function App() {
   const [transactions, setTransactions] = useState([])
   const [customerId, setCustomerId] = useState("")
   const [accountId, setAccountId] = useState("parent")
+  const [triggerUpdate, setTriggerUpdate] = useState(0)
   // fetch customer info once login
   useEffect(() => {
     const fetchCustomerInfo = async () => {
@@ -61,16 +62,38 @@ function App() {
         }
       )
 
-      const data = await response
-        .json()
-        .then((data) => {
-          return data
-        })
+      const data = await response.json()
+      const updatedTransactions = data.transaction_list
+
+      // Update the transactions state
+      setTransactions(updatedTransactions)
+
+      // Calculate the total spending from the updated transactions
+      const totalSpending = updatedTransactions.reduce(
+        (acc, transaction) => acc + parseInt(transaction.price, 10),
+        0
+      )
+
+      // Update spending in the accounts database
+      fetch(`http://localhost:8000/account/${accountId}/spending`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          spending: totalSpending,
+        }),
+      })
         .then((res) => {
-          return res.transaction_list
+          if (res.ok) {
+            console.log("Spending updated successfully in the database")
+          } else {
+            console.log("Failed to update spending in the database")
+          }
         })
-      console.log("data", data)
-      setTransactions(data)
+        .catch((error) => {
+          console.error("Error updating spending in the database:", error)
+        })
     } catch (error) {
       console.error("Error adding transaction:", error)
     }
@@ -128,11 +151,7 @@ function App() {
           <Route
             path="/account"
             element={
-              <AccountDisplay
-                accountId={accountId}
-                customerId={customerId}
-                onAddTransaction={onAddTransaction}
-              />
+              <AccountDisplay accountId={accountId} customerId={customerId} />
             }
           />
         </Routes>
