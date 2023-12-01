@@ -2,9 +2,13 @@
 import mongoose from "mongoose";
 import AccountModel from "./account.js";
 import { ObjectId } from "mongodb";
+
 mongoose.set("debug", true);
 const connectionString = `mongodb://localhost:27017/mongo`;
 
+function getAccountId(customerId) {
+
+}
 function addAccount(balance, income, spending, saving) {
   const account = {
     balance: balance,

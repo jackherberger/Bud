@@ -4,14 +4,9 @@ import Account from "./account.js";
 
 const customerSchema = new mongoose.Schema(
     {
-      name: {
-        type: String,
-        required: true,
-        trim: true,
-      },
       job: {
         type: String,
-        required: true,
+        required: false,
         trim: true,
         validate(value) {
           if (value.length < 2) {
