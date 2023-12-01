@@ -40,7 +40,6 @@ async function getUsers() {
 
 async function getUserByEmail(email) {
   try {
-    console.log(email)
     const user = await UserModel.findOne({email});
     return user;
   } catch (error) {

@@ -1,6 +1,6 @@
 import React, { useState } from "react"
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css"
 import "./TransactionTable.css"
 
 function TransactionTable({ transactions, onAddTransaction }) {
@@ -14,7 +14,7 @@ function TransactionTable({ transactions, onAddTransaction }) {
     "Electronics",
     "Travel",
     "Other",
-  ];
+  ]
 
   const [newTransaction, setNewTransaction] = useState({
     name: "",
@@ -23,30 +23,30 @@ function TransactionTable({ transactions, onAddTransaction }) {
     category: categories[0], // Default category
   })
 
-  const [startDate, setStartDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(new Date())
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setNewTransaction({
       ...newTransaction,
       [name]: value,
-    });
-  };
+    })
+  }
 
   const handleAddTransaction = async () => {
     try {
-      await onAddTransaction(newTransaction);
+      await onAddTransaction(newTransaction)
 
       setNewTransaction({
         name: "",
         price: "",
         date: "",
         category: categories[0],
-      });
+      })
     } catch (error) {
-      console.error("Error adding transaction:", error);
+      console.error("Error adding transaction:", error)
     }
-  };
+  }
 
   return (
     <div>
@@ -68,13 +68,12 @@ function TransactionTable({ transactions, onAddTransaction }) {
         <DatePicker
           selected={newTransaction.date ? new Date(newTransaction.date) : null}
           onChange={(date) => {
-            const formattedDate = date.toISOString().split('T')[0];
+            const formattedDate = date.toISOString().split("T")[0]
             setNewTransaction({
               ...newTransaction,
               date: formattedDate,
-            });
+            })
           }}
-
           placeholderText="Select Date"
         />
         <select
@@ -112,7 +111,7 @@ function TransactionTable({ transactions, onAddTransaction }) {
         {/* ... Table headers and existing transactions */}
       </table>
     </div>
-  );
+  )
 }
 
-export default TransactionTable;
+export default TransactionTable

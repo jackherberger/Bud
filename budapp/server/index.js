@@ -1,15 +1,13 @@
-import express from "express";
-import cors from "cors";
+import express from "express"
+import cors from "cors"
 import bcrypt from "bcryptjs"
 import UserServices from "./models/userServices.js"
 import AccountServices from "./models/accountServices.js"
 
-import dotenv from "dotenv";
-import userServices from "./models/userServices.js";
-dotenv.config();
+import dotenv from "dotenv"
+import userServices from "./models/userServices.js"
+dotenv.config()
 import TransactionServices from "./models/transactionServices.js"
-
-
 
 const PORT = 8000
 
@@ -47,64 +45,58 @@ app.post("/transactions", async (req, res) => {
   }
 })
 
-app.post('/users', async (req, res) => {
-  const {name, email, password} = req.body;
+app.post("/users", async (req, res) => {
+  const { name, email, password } = req.body
   try {
-    const existingUser = await userServices.getUserByEmail(email);
+    const existingUser = await userServices.getUserByEmail(email)
 
-  if (existingUser) {
-    // User already exists, return a 409 Conflict status
-    return res.status(409).json({ error: 'User already exists' });
-  }
+    if (existingUser) {
+      // User already exists, return a 409 Conflict status
+      return res.status(409).json({ error: "User already exists" })
+    }
   } catch (error) {
-    console.error('Error during signup:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error("Error during signup:", error)
+    res.status(500).json({ message: "Internal server error" })
   }
 
   try {
-    const result = await UserServices.addUser(name, email, password, 0);
-    if (result)
-        res.status(201).send(result);
-    else
-        res.status(500).end();
+    const result = await UserServices.addUser(name, email, password, 0)
+    if (result) res.status(201).send(result)
+    else res.status(500).end()
   } catch (error) {
-    console.error('Error during signup:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error("Error during signup:", error)
+    res.status(500).json({ message: "Internal server error" })
   }
-});
+})
 
-
-
-app.post('/checkLogin', async (req, res) => {
-  const { username, hashedPassword } = req.body;
+app.post("/checkLogin", async (req, res) => {
+  const { username, hashedPassword } = req.body
 
   try {
     // Find the user in the MongoDB collection
-    const user = await UserServices.getUserByEmail(username);
-
+    const user = await UserServices.getUserByEmail(username)
     if (user) {
       // Compare the hashed password with the stored hashed password in the database
       // const passwordMatch = bcrypt.compareSync(hashedPassword, user.password);
       const passwordMatch = hashedPassword.localeCompare(user.password)
-      
+
       if (passwordMatch == 0) {
         // Successful login
         // console.log("sucess")
-        res.status(200).json({ message: 'Login successful' });
+        res.status(200).json({ message: "Login successful" })
       } else {
         // Invalid password
-        res.status(401).json({ message: 'password' });
+        res.status(401).json({ message: "password" })
       }
     } else {
       // User not found
-      res.status(402).json({ message: 'Invalid' });
+      res.status(402).json({ message: "Invalid" })
     }
   } catch (error) {
-    console.error('Error during login:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error("Error during login:", error)
+    res.status(500).json({ message: "Internal server error" })
   }
-});
-
+})
 
 //account stuff
 app.get("/account/:id", async (req, res) => {
