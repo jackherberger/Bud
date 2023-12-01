@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import "./login.css";
 
-const Login = () => {
+const Login = (props) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -35,11 +35,12 @@ const Login = () => {
           hashedPassword: password,
         }),
       });
+      const customerId = await response.json().then((data) => data.customer);
+      props.setCustomerId(customerId);
 
       if (response.ok) {
         // Successful login logic here
         console.log("Login successful!");
-        window.location.href = "http://localhost:3000/transactions";
       } else {
         // Failed login logic here
         setError("Login failed. Invalid username or password.");
