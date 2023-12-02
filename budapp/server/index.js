@@ -3,7 +3,7 @@ import cors from "cors";
 import bcrypt from "bcryptjs"
 import UserServices from "./models/userServices.js"
 import AccountServices from "./models/accountServices.js"
-
+import { authenticateUser, loginUser } from "./auth.js"
 import dotenv from "dotenv";
 import userServices from "./models/userServices.js";
 dotenv.config();
@@ -20,12 +20,12 @@ app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`)
 })
 
-app.get("/users", async (req, res) => {
+app.get("/users", authenticateUser , async (req, res) => {
   const result = await UserServices.getUsers()
   res.send(result)
 })
 
-app.get("/transactions/:id", async (req, res) => {
+app.get("/transactions/:id", authenticateUser , async (req, res) => {
   try {
     const id = req.params["id"]
     const transactions = await TransactionServices.getTransactions(id)
@@ -36,7 +36,7 @@ app.get("/transactions/:id", async (req, res) => {
   }
 })
 
-app.post("/transactions/:id", async (req, res) => {
+app.post("/transactions/:id", authenticateUser , async (req, res) => {
   try {
     const id = req.params["id"]
     const transaction = req.body
@@ -72,8 +72,9 @@ app.post('/users', async (req, res) => {
     // now attach them
     const attachaccount = await CustomerServices.attachAccountToCustomer(newaccount._id, newcustomer._id);
     const attachcustomer = await CustomerServices.attachCustomerToUser(newcustomer._id, result._id);
+    
     if (result)
-        res.status(201).send(result);
+        res.status(201).send({token: result});
     else
         res.status(500).end();
   } catch (error) {
@@ -84,40 +85,11 @@ app.post('/users', async (req, res) => {
 
 
 
-app.post('/checkLogin', async (req, res) => {
-  const { username, hashedPassword } = req.body;
-
-  try {
-    // Find the user in the MongoDB collection
-    const user = await UserServices.getUserByEmail(username);
-
-    if (user) {
-      // Compare the hashed password with the stored hashed password in the database
-      // const passwordMatch = bcrypt.compareSync(hashedPassword, user.password);
-      const passwordMatch = hashedPassword.localeCompare(user.password)
-      
-      if (passwordMatch == 0) {
-        // Successful login
-        // console.log("sucess")
-        
-        res.status(200).send(user);
-      } else {
-        // Invalid password
-        res.status(401).json({ message: 'password' });
-      }
-    } else {
-      // User not found
-      res.status(402).json({ message: 'Invalid' });
-    }
-  } catch (error) {
-    console.error('Error during login:', error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
-});
+app.post('/checkLogin', loginUser);
 
 
 //account stuff
-app.get("/account/:id", async (req, res) => {
+app.get("/account/:id", authenticateUser ,async (req, res) => {
   const id = req.params["id"]
   const result = await AccountServices.getAccountInfo(id)
   if (result === undefined || result === null)
@@ -126,7 +98,7 @@ app.get("/account/:id", async (req, res) => {
     res.send({ account: result })
   }
 })
-app.post("/account", async (req, res) => {
+app.post("/account",authenticateUser , async (req, res) => {
   try {
     const balance = req.body["balance"]
     const income = req.body["income"]
@@ -156,7 +128,7 @@ app.post("/account", async (req, res) => {
   }
 })
 
-app.patch("/account/:id/balance", async (req, res) => {
+app.patch("/account/:id/balance", authenticateUser , async (req, res) => {
   const id = req.params["id"]
   try {
     const newBalance = req.body["balance"]
@@ -178,7 +150,7 @@ app.patch("/account/:id/balance", async (req, res) => {
   }
 })
 
-app.patch("/account/:id/income", async (req, res) => {
+app.patch("/account/:id/income", authenticateUser ,async (req, res) => {
   const id = req.params["id"]
   try {
     const newIncome = req.body["income"]
@@ -204,7 +176,7 @@ app.patch("/account/:id/income", async (req, res) => {
   }
 })
 
-app.patch("/account/:id/spending", async (req, res) => {
+app.patch("/account/:id/spending", authenticateUser ,async (req, res) => {
   const id = req.params["id"]
   try {
     const newSpending = req.body["spending"]
@@ -226,7 +198,7 @@ app.patch("/account/:id/spending", async (req, res) => {
   }
 })
 
-app.patch("/account/:id/saving", async (req, res) => {
+app.patch("/account/:id/saving", authenticateUser , async (req, res) => {
   const id = req.params["id"]
   try {
     const newSaving = req.body["saving"]
@@ -252,7 +224,7 @@ app.patch("/account/:id/saving", async (req, res) => {
   }
 })
 
-app.get("/customer/:id", async (req, res) => {
+app.get("/customer/:id", authenticateUser , async (req, res) => {
   const id = req.params["id"]
   const result = await CustomerServices.getCustomerInfo(id)
   if (result === undefined || result === null)

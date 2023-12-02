@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import bcrypt from "bcryptjs";
+import { useNavigate } from "react-router-dom";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import "./login.css";
 
 const Login = (props) => {
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -20,9 +22,6 @@ const Login = (props) => {
   };
 
   const handleLogin = async () => {
-    console.log(
-      `Logging in with username: ${username}, hashed password: ${password}`
-    );
 
     try {
       const response = await fetch("http://localhost:8000/checkLogin", {
@@ -32,7 +31,7 @@ const Login = (props) => {
         },
         body: JSON.stringify({
           username: username,
-          hashedPassword: password,
+          pwd: password,
         }),
       });
       const customerId = await response.json().then((data) => data.customer);
