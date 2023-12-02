@@ -15,7 +15,6 @@ function App() {
   const [transactions, setTransactions] = useState([])
   const [customerId, setCustomerId] = useState("")
   const [accountId, setAccountId] = useState("parent")
-  const [triggerUpdate, setTriggerUpdate] = useState(0)
   // fetch customer info once login
   useEffect(() => {
     const fetchCustomerInfo = async () => {

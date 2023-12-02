@@ -20,6 +20,7 @@ function AccountDisplay(props) {
     getInfo()
   }, [props.accountId, props.customerId])
 
+  // Get the info needed for account from accounts and transaction
   function getInfo() {
     Promise.all([
       fetch("http://localhost:8000/account/" + props.accountId).then((res) =>
@@ -35,6 +36,7 @@ function AccountDisplay(props) {
         console.log(accountInfo)
         const spendingList = transactions[0].transaction_list
         console.log(transactions)
+
         // Calculate total spending
         const totalSpending = spendingList.reduce(
           (acc, transaction) => acc + parseInt(transaction.price, 10),
@@ -52,6 +54,7 @@ function AccountDisplay(props) {
       })
   }
 
+  // Update the account when adding or subtracting to the three catagories
   function updateAccount(type) {
     let newAmount = 0
     if (type === "+") {
