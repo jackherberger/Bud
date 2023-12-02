@@ -1,6 +1,8 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import UserServices from "./userServices.js";
+import { useNavigate } from "react-router-dom";
 dotenv.config();
 
 // Generates ACCCESS TOKEN
@@ -47,20 +49,19 @@ export function generateAccessToken(username) {
   
   export async function loginUser(req, res) {
     const { username, pwd } = req.body; // from form
-    const retrievedUser = creds.find(
-      (c) => c.username === username
-    );
-  
+    const retrievedUser = await UserServices.getUserByEmail(username);
+    console.log(retrievedUser);
     if (!retrievedUser) {
       // invalid username
       res.status(401).send("Unauthorized");
     } else {
-      bcrypt
-        .compare(pwd, retrievedUser.hashedPassword)
+      await bcrypt
+        .compare(pwd, retrievedUser.password)
         .then((matched) => {
           if (matched) {
             generateAccessToken(username).then((token) => {
               res.status(200).send({ token: token });
+              
             });
           } else {
             // invalid password

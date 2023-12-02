@@ -3,7 +3,7 @@ import cors from "cors";
 import bcrypt from "bcryptjs"
 import UserServices from "./models/userServices.js"
 import AccountServices from "./models/accountServices.js"
-import { authenticateUser, loginUser } from "./auth.js"
+import { authenticateUser, loginUser } from "./models/auth.js"
 import dotenv from "dotenv";
 import userServices from "./models/userServices.js";
 dotenv.config();
@@ -25,7 +25,7 @@ app.get("/users", authenticateUser , async (req, res) => {
   res.send(result)
 })
 
-app.get("/transactions/:id", authenticateUser , async (req, res) => {
+app.get("/transactions/:id", async (req, res) => {
   try {
     const id = req.params["id"]
     const transactions = await TransactionServices.getTransactions(id)
@@ -68,13 +68,14 @@ app.post('/users', async (req, res) => {
     const newaccount = await AccountServices.addAccount(0, 0, 0, 0);
     //treat as new customer for now
     const newcustomer = await CustomerServices.addCustomer();
-    const result = await UserServices.addUser(name, email, password, 0);
+    const {promise: result, token: ourToken} = (await UserServices.addUser(name, email, password, 0));
+    console.log(result)
     // now attach them
     const attachaccount = await CustomerServices.attachAccountToCustomer(newaccount._id, newcustomer._id);
     const attachcustomer = await CustomerServices.attachCustomerToUser(newcustomer._id, result._id);
     
-    if (result)
-        res.status(201).send({token: result});
+    if (ourToken)
+        res.status(201).send({token: ourToken});
     else
         res.status(500).end();
   } catch (error) {

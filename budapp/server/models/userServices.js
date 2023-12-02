@@ -25,10 +25,9 @@ mongoose.connect(uri).then(() => {
 
 //add user - hash password - save model to DB - generateToken
 async function addUser(name, email, password, permissions) {
-  const hash = (bcrypt
+  const hash = await (bcrypt
   .genSalt(10)
-  .then((salt) => bcrypt.hash(pwd, salt)));
-
+  .then((salt) => bcrypt.hash(password, salt)));
   const user = {
     name: name,
     email: email,
@@ -37,9 +36,9 @@ async function addUser(name, email, password, permissions) {
   }
 
   const userToAdd = new UserModel(user);
-  await userToAdd.save();
-  const promise = await generateAccessToken(email)
-  return promise;
+  const promise = await userToAdd.save();
+  const token = await generateAccessToken(email);
+  return {promise, token};
 }
 
 async function getUsers() {

@@ -22,7 +22,6 @@ const Login = (props) => {
   };
 
   const handleLogin = async () => {
-
     try {
       const response = await fetch("http://localhost:8000/checkLogin", {
         method: "POST",
@@ -40,6 +39,7 @@ const Login = (props) => {
       if (response.ok) {
         // Successful login logic here
         console.log("Login successful!");
+        navigate("/transactions")
       } else {
         // Failed login logic here
         setError("Login failed. Invalid username or password.");
