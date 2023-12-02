@@ -1,9 +1,9 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./TransactionTable.css"
 
-function TransactionTable({ transactions, onAddTransaction }) {
+function TransactionTable({ setTransactions, customerId, transactions, onAddTransaction }) {
   const categories = [
     "Groceries",
     "Clothes",
@@ -24,6 +24,20 @@ function TransactionTable({ transactions, onAddTransaction }) {
   })
 
   const [startDate, setStartDate] = useState(new Date());
+
+  useEffect(() => {
+    const fetchTransactionInfo = async () => {
+      try {
+        const response = await fetch(`http://localhost:8000/transactions/${customerId}`);
+        const data = await response.json().then((data) => { return data }).then(res => { return res[0] });
+        setTransactions(data.transaction_list);
+      } catch (error) {
+        console.error("Error fetching transactions:", error);
+      }
+    };
+
+    fetchTransactionInfo();
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

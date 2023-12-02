@@ -13,8 +13,8 @@ import { set } from "mongoose";
 
 function App() {
   const [transactions, setTransactions] = useState([]);
-  const [customerId, setCustomerId] = useState("");
-  const [accountId, setAccountId] = useState("parent");
+  const [customerId, setCustomerId] = useState(localStorage.getItem("customerId"));
+  const [accountId, setAccountId] = useState(localStorage.getItem("accountId"));
   // fetch customer info once login
   useEffect(() => {
     const fetchCustomerInfo = async () => {
@@ -58,13 +58,13 @@ function App() {
   };
 
   const onSetCustomerId = (customerId) => {
+    localStorage.setItem("customerId", customerId);
     setCustomerId(customerId);
-    console.log("ran in app", customerId);
   }
 
   const onSetAccountId = (accountId) => {
+    localStorage.setItem("accountId", accountId);
     setAccountId(accountId);
-    console.log("ran in app", accountId);
   }
   return (
     <div className="App">
@@ -72,7 +72,7 @@ function App() {
         <Navbar />
         <Routes>
           <Route exact path="/" element={<Home />}></Route>
-          <Route exact path="/login" element={<Login setCustomerId={onSetCustomerId} setAccountId={onSetAccountId}/>} />
+          <Route exact path="/login" element={<Login setCustomerId={onSetCustomerId} />} />
           <Route path="/signup" element={<SignUp />} />
           <Route
             path="/transactions"
@@ -83,6 +83,7 @@ function App() {
                     transactions={transactions}
                     onAddTransaction={onAddTransaction}
                     customerId={customerId}
+                    setTransactions={setTransactions}
                   />
                 </div>
                 <div style={{ flex: 1 }}>

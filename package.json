@@ -8,8 +8,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start server": "nodemon -w server index.js",
-    "start client": "nodemon -w client index.js"
+    "start-server": "nodemon -w budapp/server budapp/server/index.js",
+    "start-client": "nodemon -w budapp/client budapp/client/src/index.js"
   },
   "repository": {
     "type": "git",
@@ -21,7 +21,11 @@
     "url": "https://github.com/jackherberger/Bud/issues"
   },
   "homepage": "https://github.com/jackherberger/Bud#readme",
-  "workspaces":[
-    "budapp/*"
-  ]
+  "workspaces": [
+    "budapp/server",
+    "budapp/client"
+  ],
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
 }
