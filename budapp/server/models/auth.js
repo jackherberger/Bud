@@ -60,7 +60,12 @@ export function generateAccessToken(username) {
         .then((matched) => {
           if (matched) {
             generateAccessToken(username).then((token) => {
-              res.status(200).send({ token: token });
+                const retUser = {
+                  ...retrievedUser,
+                  token: token
+                }
+
+              res.status(200).send(retUser);
               
             });
           } else {
@@ -75,4 +80,5 @@ export function generateAccessToken(username) {
         });
     }
   }
+ 
   

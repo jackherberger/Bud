@@ -12,9 +12,28 @@ function AccountDisplay(props) {
   const [amount, setAmount] = useState(0);
   const [transactionType, setTransactionType] = useState("+"); // + for deposit, - for withdraw
   const [selectedAccount, setSelectedAccount] = useState("balance");
+  const INVALID_TOKEN = "INVALID_TOKEN"; // for token usage and passes valid authenticated requests
+  const [token, setToken] = useState(localStorage.getItem("token"));
 
-  function getInfo() {
-    fetch("http://localhost:8000/account/" + props.accountId)
+  function addAuthHeader(otherHeaders = {}) {
+    if (token === INVALID_TOKEN) {
+      return otherHeaders;
+    } else {
+      return {
+        ...otherHeaders,
+        Authorization: `Bearer ${token}`
+      };
+    }
+  }
+
+  // Does it need auth? changed fetch method
+  async function getInfo() {
+    await fetch("http://localhost:8000/account/" + props.accountId, {
+      method: "GET",
+      headers: addAuthHeader({
+        "Content-Type": "application/json"
+      })
+    })
       .then((res) => res.json())
       .then((json) => setInfo(json.account[0]))
       .catch((error) => {
@@ -32,9 +51,9 @@ function AccountDisplay(props) {
 
     fetch(`http://localhost:8000/account/${props.accountId}/${selectedAccount}`, {
       method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: addAuthHeader({
+        "Content-Type": "application/json"
+      }),
       body: JSON.stringify({
         [selectedAccount]: newAmount,
       }),

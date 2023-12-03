@@ -69,7 +69,6 @@ app.post('/users', async (req, res) => {
     //treat as new customer for now
     const newcustomer = await CustomerServices.addCustomer();
     const {promise: result, token: ourToken} = (await UserServices.addUser(name, email, password, 0));
-    console.log(result)
     // now attach them
     const attachaccount = await CustomerServices.attachAccountToCustomer(newaccount._id, newcustomer._id);
     const attachcustomer = await CustomerServices.attachCustomerToUser(newcustomer._id, result._id);

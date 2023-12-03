@@ -4,6 +4,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import "./TransactionTable.css"
 
 function TransactionTable({ setTransactions, customerId, transactions, onAddTransaction }) {
+  const INVALID_TOKEN = "INVALID_TOKEN";
+  const [token, setToken] = useState(localStorage.getItem("token"));
   const categories = [
     "Groceries",
     "Clothes",
@@ -16,6 +18,17 @@ function TransactionTable({ setTransactions, customerId, transactions, onAddTran
     "Other",
   ];
 
+  function addAuthHeader(otherHeaders = {}) {
+    if (token === INVALID_TOKEN) {
+      return otherHeaders;
+    } else {
+      return {
+        ...otherHeaders,
+        Authorization: `Bearer ${token}`
+      };
+    }
+  }
+
   const [newTransaction, setNewTransaction] = useState({
     name: "",
     price: "",
@@ -25,12 +38,18 @@ function TransactionTable({ setTransactions, customerId, transactions, onAddTran
 
   const [startDate, setStartDate] = useState(new Date());
 
+  // Changed FETCH METHOD TO GET AND TWEAKED RETURNED JSON
   useEffect(() => {
     const fetchTransactionInfo = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/transactions/${customerId}`);
-        const data = await response.json().then((data) => { return data }).then(res => { return res[0] });
-        setTransactions(data.transaction_list);
+        const response = await fetch(`http://localhost:8000/transactions/${customerId}`, {
+          method: "GET",
+          headers: addAuthHeader({
+            "Content-Type": "application/json"
+          }),
+        });
+        const data = await response.json();
+        setTransactions(data[0].transaction_list);
       } catch (error) {
         console.error("Error fetching transactions:", error);
       }
