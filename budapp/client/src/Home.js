@@ -1,9 +1,21 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import "./Home.css";
+import { useInView } from "react-intersection-observer";
 
 const Home = () => {
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.2,
+  });
+
+  useEffect(() => {
+    if (inView) {
+      document.querySelector(".Home").classList.add("is-visible");
+    }
+  }, [inView]);
+
   return (
-    <div className="Home">
+    <div className="Home" ref={ref}>
       <h1> Bud™️ </h1>
       <p>The smart transaction tracker.</p>
       <p>
