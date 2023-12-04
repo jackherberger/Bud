@@ -82,8 +82,35 @@ app.post("/users", async (req, res) => {
   }
 })
 
-app.post('/checkLogin', loginUser);
+app.post("/checkLogin", async (req, res) => {
+  const { username, hashedPassword } = req.body
 
+  try {
+    // Find the user in the MongoDB collection
+    const user = await UserServices.getUserByEmail(username)
+    if (user) {
+      // Compare the hashed password with the stored hashed password in the database
+      // const passwordMatch = bcrypt.compareSync(hashedPassword, user.password);
+      const passwordMatch = hashedPassword.localeCompare(user.password)
+
+      if (passwordMatch == 0) {
+        // Successful login
+        // console.log("sucess")
+
+        res.status(200).send(user)
+      } else {
+        // Invalid password
+        res.status(401).json({ message: "password" })
+      }
+    } else {
+      // User not found
+      res.status(402).json({ message: "Invalid" })
+    }
+  } catch (error) {
+    console.error("Error during login:", error)
+    res.status(500).json({ message: "Internal server error" })
+  }
+})
 
 //account stuff
 app.get("/account/:id", authenticateUser ,async (req, res) => {
