@@ -64,6 +64,7 @@ const Login = (props) => {
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            name="username"
             required
           />
         </label>
@@ -75,12 +76,18 @@ const Login = (props) => {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            name="password"
             required
           />
         </label>
         <br />
         <br />
-        <button type="button" className="loginButton" onClick={handleLogin}>
+        <button
+          type="button"
+          className="loginButton"
+          value="Login"
+          onClick={handleLogin}
+        >
           Login
         </button>
         <br />
