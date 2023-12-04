@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import "./TransactionTable.css"
+import "./TransactionTable.css";
 
 function TransactionTable({ setTransactions, customerId, transactions, onAddTransaction }) {
   const INVALID_TOKEN = "INVALID_TOKEN";
@@ -34,7 +34,7 @@ function TransactionTable({ setTransactions, customerId, transactions, onAddTran
     price: "",
     date: "",
     category: categories[0], // Default category
-  })
+  });
 
   const [startDate, setStartDate] = useState(new Date());
 
@@ -99,15 +99,15 @@ function TransactionTable({ setTransactions, customerId, transactions, onAddTran
           onChange={handleInputChange}
         />
         <DatePicker
+          name="date"
           selected={newTransaction.date ? new Date(newTransaction.date) : null}
           onChange={(date) => {
-            const formattedDate = date.toISOString().split('T')[0];
+            const formattedDate = date.toISOString().split("T")[0];
             setNewTransaction({
               ...newTransaction,
               date: formattedDate,
             });
           }}
-
           placeholderText="Select Date"
         />
         <select
@@ -121,7 +121,9 @@ function TransactionTable({ setTransactions, customerId, transactions, onAddTran
             </option>
           ))}
         </select>
-        <button onClick={handleAddTransaction}>Add</button>
+        <button value="Add" onClick={handleAddTransaction}>
+          Add
+        </button>
       </div>
       <table className="transaction-table">
         <thead>

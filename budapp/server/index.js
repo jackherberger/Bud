@@ -1,5 +1,5 @@
-import express from "express";
-import cors from "cors";
+import express from "express"
+import cors from "cors"
 import bcrypt from "bcryptjs"
 import UserServices from "./models/userServices.js"
 import AccountServices from "./models/accountServices.js"
@@ -8,7 +8,7 @@ import dotenv from "dotenv";
 import userServices from "./models/userServices.js";
 dotenv.config();
 import TransactionServices from "./models/transactionServices.js"
-import CustomerServices from "./models/customerServices.js";
+import CustomerServices from "./models/customerServices.js"
 
 const PORT = 8000
 
@@ -40,7 +40,7 @@ app.post("/transactions/:id", authenticateUser , async (req, res) => {
   try {
     const id = req.params["id"]
     const transaction = req.body
-    const result = await TransactionServices.addTransaction(transaction,id)
+    const result = await TransactionServices.addTransaction(transaction, id)
     res.status(201).json(result)
   } catch (error) {
     console.error("Error adding transaction:", error)
@@ -48,24 +48,23 @@ app.post("/transactions/:id", authenticateUser , async (req, res) => {
   }
 })
 
-app.post('/users', async (req, res) => {
-  const {name, email, password} = req.body;
+app.post("/users", async (req, res) => {
+  const { name, email, password } = req.body
   try {
-    const existingUser = await userServices.getUserByEmail(email);
-    
+    const existingUser = await userServices.getUserByEmail(email)
 
-  if (existingUser) {
-    // User already exists, return a 409 Conflict status
-    return res.status(409).json({ error: 'User already exists' });
-  }
+    if (existingUser) {
+      // User already exists, return a 409 Conflict status
+      return res.status(409).json({ error: "User already exists" })
+    }
   } catch (error) {
-    console.error('Error during signup:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error("Error during signup:", error)
+    res.status(500).json({ message: "Internal server error" })
   }
 
   try {
     // Create a new user
-    const newaccount = await AccountServices.addAccount(0, 0, 0, 0);
+    const newaccount = await AccountServices.addAccount(0, 0, 0, 0)
     //treat as new customer for now
     const newcustomer = await CustomerServices.addCustomer();
     const {promise: result, token: ourToken} = (await UserServices.addUser(name, email, password, 0));
@@ -78,15 +77,40 @@ app.post('/users', async (req, res) => {
     else
         res.status(500).end();
   } catch (error) {
-    console.error('Error during signup:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error("Error during signup:", error)
+    res.status(500).json({ message: "Internal server error" })
   }
-});
+})
 
+app.post("/checkLogin", async (req, res) => {
+  const { username, hashedPassword } = req.body
 
+  try {
+    // Find the user in the MongoDB collection
+    const user = await UserServices.getUserByEmail(username)
+    if (user) {
+      // Compare the hashed password with the stored hashed password in the database
+      // const passwordMatch = bcrypt.compareSync(hashedPassword, user.password);
+      const passwordMatch = hashedPassword.localeCompare(user.password)
 
-app.post('/checkLogin', loginUser);
+      if (passwordMatch == 0) {
+        // Successful login
+        // console.log("sucess")
 
+        res.status(200).send(user)
+      } else {
+        // Invalid password
+        res.status(401).json({ message: "password" })
+      }
+    } else {
+      // User not found
+      res.status(402).json({ message: "Invalid" })
+    }
+  } catch (error) {
+    console.error("Error during login:", error)
+    res.status(500).json({ message: "Internal server error" })
+  }
+})
 
 //account stuff
 app.get("/account/:id", authenticateUser ,async (req, res) => {
@@ -182,10 +206,9 @@ app.patch("/account/:id/spending", authenticateUser ,async (req, res) => {
     const newSpending = req.body["spending"]
     console.log(req.body)
     const result = await AccountServices.editAccountSpending(id, newSpending)
-    if (result["matchedCount"]) res.status(404).send("Resource not found.")
+    if (!result["matchedCount"]) res.status(404).send("Resource not found.")
     else {
-      if (result["upsertedCount"]) res.send({ account_list: result })
-      else res.send("Found but did not update")
+      res.status(200).send({ account_list: result })
     }
   } catch (error) {
     res
@@ -231,5 +254,25 @@ app.get("/customer/:id", authenticateUser , async (req, res) => {
     res.status(404).send("Resource not found.")
   else {
     res.send({ customer: result })
+  }
+})
+
+app.get("/account/:id/balance", async (req, res) => {
+  const accountId = req.params.id
+
+  try {
+    // Call the service function to get the account information
+    const accountInfo = await AccountServices.getAccountInfo(accountId)
+
+    // Check if the account information is found
+    if (accountInfo.length === 0) {
+      return res.status(404).send("Account not found.")
+    }
+
+    // Send the account balance in the response
+    res.status(200).json({ balance: accountInfo[0].balance })
+  } catch (error) {
+    console.error("Error getting account balance:", error)
+    res.status(500).send("Internal Server Error")
   }
 })

@@ -50,6 +50,7 @@ const SignUp = () => {
         setError("Email already used. Please choose another email.");
         console.log("User already exists");
       } else {
+        console.log(response);
         // Failed sign-up logic here
         console.log("Sign-up failed. Please check your data.");
       }
@@ -119,7 +120,12 @@ const SignUp = () => {
           />
         </div>
         <br />
-        <button type="submit" className="signupButton" onClick={handleSubmit}>
+        <button
+          type="submit"
+          value="signup"
+          className="signupButton"
+          onClick={handleSubmit}
+        >
           {" "}
           Sign Up
         </button>
