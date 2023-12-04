@@ -15,14 +15,31 @@ function App() {
   const [transactions, setTransactions] = useState([]);
   const [customerId, setCustomerId] = useState(localStorage.getItem("customerId"));
   const [accountId, setAccountId] = useState(localStorage.getItem("accountId"));
-  // fetch customer info once login
+  const INVALID_TOKEN = "INVALID_TOKEN";
+  const [token, setToken] = useState(localStorage.getItem("token"));
+
+  function addAuthHeader(otherHeaders = {}) {
+    if (token === INVALID_TOKEN) {
+      return otherHeaders;
+    } else {
+      return {
+        ...otherHeaders,
+        Authorization: `Bearer ${token}`
+      };
+    }
+  }
+  // fetch customer info once login - if token invalid, don't fetch - maybe add "PLEASE LOGIN"
   useEffect(() => {
-    const fetchCustomerInfo = async () => {
-      try {
-        console.log("in trans customerId:", customerId)
-        const response = await fetch(
-          `http://localhost:8000/transactions/${customerId}`
-        )
+    if (token !== INVALID_TOKEN) {
+      const fetchCustomerInfo = async () => {
+        try {
+          console.log("in trans customerId:", customerId)
+          const response = await fetch(`http://localhost:8000/transactions/${customerId}`, {
+            method: "GET",
+            headers: addAuthHeader({
+              "Content-Type": "application/json"
+            }),
+          });
         const data = await response
           .json()
           .then((data) => {
@@ -37,29 +54,27 @@ function App() {
         console.error("Error fetching transactions:", error)
       }
     }
-
-    fetchCustomerInfo()
-    if (customerId) {
-      console.log("logged in", customerId, accountId)
+      fetchCustomerInfo();
+      if (customerId) {
+        console.log("logged in", customerId, accountId)
+      }
     }
-  }, [customerId])
-
+  }, [customerId]);
+  
   // const handleAddTransaction = (newTransaction) => {
   //   // Update the transactions array by adding the new transaction
   //   setTransactions([...transactions, newTransaction]);
   // };
   const onAddTransaction = async (newTransaction) => {
-    try {
-      const response = await fetch(
-        `http://localhost:8000/transactions/${customerId}`,
-        {
+    if (token !== INVALID_TOKEN) {
+      try {
+        const response = await fetch(`http://localhost:8000/transactions/${customerId}`, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: addAuthHeader({
+            "Content-Type": "application/json"
+          }),
           body: JSON.stringify(newTransaction),
-        }
-      )
+        });
 
       const data = await response.json()
       const updatedTransactions = data.transaction_list
@@ -93,8 +108,9 @@ function App() {
         .catch((error) => {
           console.error("Error updating spending in the database:", error)
         })
-    } catch (error) {
-      console.error("Error adding transaction:", error)
+      } catch (error) {
+        console.error("Error adding transaction:", error);
+      }
     }
   }
 

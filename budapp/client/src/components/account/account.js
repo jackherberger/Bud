@@ -9,11 +9,25 @@ function AccountDisplay(props) {
     saving: 0,
     spending: 0,
   })
+  
   const [amount, setAmount] = useState(0)
   const [transactionType, setTransactionType] = useState("+") // + for deposit, - for withdr
   const [selectedAccount, setSelectedAccount] = useState("balance")
+  const INVALID_TOKEN = "INVALID_TOKEN"; // for token usage and passes valid authenticated requests
+  const [token, setToken] = useState(localStorage.getItem("token"));
 
-  const adjustedBalance = info.balance - info.spending
+ const adjustedBalance = info.balance - info.spending
+ 
+ function addAuthHeader(otherHeaders = {}) {
+    if (token === INVALID_TOKEN) {
+      return otherHeaders;
+    } else {
+      return {
+        ...otherHeaders,
+        Authorization: `Bearer ${token}`
+      };
+    }
+  }
 
   useEffect(() => {
     console.log("useEffect in AccountDisplay triggered")
@@ -23,9 +37,14 @@ function AccountDisplay(props) {
   // Get the info needed for account from accounts and transaction
   function getInfo() {
     Promise.all([
-      fetch("http://localhost:8000/account/" + props.accountId).then((res) =>
-        res.json()
-      ),
+      fetch("http://localhost:8000/account/" + props.accountId, {
+      method: "GET",
+      headers: addAuthHeader({
+        "Content-Type": "application/json"
+      })
+    })
+      .then((res) => res.json())
+      .then((json) => setInfo(json.account[0])),
       fetch("http://localhost:8000/transactions/" + props.customerId).then(
         (res) => res.json()
       ),
@@ -63,18 +82,15 @@ function AccountDisplay(props) {
       newAmount = info[selectedAccount] - amount
     }
 
-    fetch(
-      `http://localhost:8000/account/${props.accountId}/${selectedAccount}`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          [selectedAccount]: newAmount,
-        }),
-      }
-    )
+    fetch(`http://localhost:8000/account/${props.accountId}/${selectedAccount}`, {
+      method: "PATCH",
+      headers: addAuthHeader({
+        "Content-Type": "application/json"
+      }),
+      body: JSON.stringify({
+        [selectedAccount]: newAmount,
+      }),
+    })
       .then((res) => {
         if (res.ok) {
           console.log(selectedAccount)
