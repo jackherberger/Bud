@@ -1,18 +1,18 @@
-import React, { useEffect, useRef } from "react";
-import "./Home.css";
-import { useInView } from "react-intersection-observer";
+import React, { useEffect, useRef } from "react"
+import "./Home.css"
+import { useInView } from "react-intersection-observer"
 
 const Home = () => {
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.2,
-  });
+  })
 
   useEffect(() => {
     if (inView) {
-      document.querySelector(".Home").classList.add("is-visible");
+      document.querySelector(".Home").classList.add("is-visible")
     }
-  }, [inView]);
+  }, [inView])
 
   return (
     <div className="Home" ref={ref}>
@@ -49,7 +49,7 @@ const Home = () => {
         allowing you to understand where your money is going and how you can
         optimize your budget for better financial outcomes.
         <h3>Tailored for You:</h3>
-        Bud doesn not believe in one-size-fits-all solutions. Our app adapts to
+        Bud does not believe in one-size-fits-all solutions. Our app adapts to
         your unique financial situation, providing personalized recommendations
         and strategies to help you achieve your financial goals.
         <h3>Financial Independence:</h3>Empower yourself with the knowledge and
@@ -71,7 +71,7 @@ const Home = () => {
       <br></br>
       <br></br>
     </div>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home
