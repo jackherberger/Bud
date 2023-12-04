@@ -43,7 +43,6 @@ const SignUp = () => {
       if (response.ok) {
         // Successful sign-up logic here
         console.log("User signed up successfully!");
-        window.location.href = "http://localhost:3000/transactions";
       } else if (response.status === 409) {
         setError("Email already used. Please choose another email.");
         console.log("User already exists");
