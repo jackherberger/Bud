@@ -1,28 +1,28 @@
 // ChartComponent.js
-import React, { useEffect, useRef } from "react";
-import Chart from "chart.js/auto";
+import React, { useEffect, useRef } from "react"
+import Chart from "chart.js/auto"
 
-function ChartComponent({ data }) {
-  const chartRef = useRef(null);
+function ChartComponent({ balance, income, savings, spendings }) {
+  const chartRef = useRef(null)
 
   useEffect(() => {
-    let newChartInstance = null;
+    let newChartInstance = null
 
-    if (chartRef.current && data) {
+    if (chartRef.current) {
       if (chartRef.current.chart) {
-        chartRef.current.chart.destroy();
+        chartRef.current.chart.destroy()
       }
 
-      const ctx = chartRef.current.getContext("2d");
+      const ctx = chartRef.current.getContext("2d")
       newChartInstance = new Chart(ctx, {
         type: "bar",
         data: {
-          labels: ["Balance", "Income", "Savings"],
+          labels: ["Balance", "Income", "Savings", "Spendings"],
           datasets: [
             {
               label: "Amount",
-              data: [data.balance, data.income, data.saving],
-              backgroundColor: ["blue", "orange", "green"],
+              data: [balance, income, savings, spendings],
+              backgroundColor: ["blue", "orange", "green", "red"], // Adjust colors
               barThickness: 80, // Adjust bar width
             },
           ],
@@ -37,23 +37,21 @@ function ChartComponent({ data }) {
             },
           },
         },
-      });
+      })
     }
 
     return () => {
       if (newChartInstance) {
-        newChartInstance.destroy();
+        newChartInstance.destroy()
       }
-    };
-  }, [data]);
+    }
+  }, [balance, income, savings, spendings])
 
   return (
     <div style={{ width: "500px", height: "250px", margin: "40px" }}>
-      {" "}
-      {/* Adjust width and margin */}
       <canvas ref={chartRef} />
     </div>
-  );
+  )
 }
 
-export default ChartComponent;
+export default ChartComponent

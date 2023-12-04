@@ -8,6 +8,7 @@ module.exports = {
     {
       env: {
         node: true,
+        mocha: true,
       },
       files: [".eslintrc.{js,cjs}"],
       parserOptions: {
@@ -28,4 +29,4 @@ module.exports = {
     "comma-dangle": "off",
     "space-before-function-paren": "off",
   },
-}
+};

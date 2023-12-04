@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import "./login.css";
 import "./signup.css";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     firstName: "",
@@ -41,12 +43,14 @@ const SignUp = () => {
       });
 
       if (response.ok) {
-        // Successful sign-up logic here
+        // Successful sign-up logic  - moves user to login page after delay
         console.log("User signed up successfully!");
+        navigate('/login');
       } else if (response.status === 409) {
         setError("Email already used. Please choose another email.");
         console.log("User already exists");
       } else {
+        console.log(response);
         // Failed sign-up logic here
         console.log("Sign-up failed. Please check your data.");
       }
@@ -116,7 +120,12 @@ const SignUp = () => {
           />
         </div>
         <br />
-        <button type="submit" className="signupButton" onClick={handleSubmit}>
+        <button
+          type="submit"
+          value="signup"
+          className="signupButton"
+          onClick={handleSubmit}
+        >
           {" "}
           Sign Up
         </button>
