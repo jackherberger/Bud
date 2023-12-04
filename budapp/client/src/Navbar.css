@@ -3,12 +3,36 @@
   padding: 10px;
   text-align: center;
   width: 100%;
+  /* background-color: #b0e0e6; Background color for the entire navbar */
+  border-radius: 5px;
 }
+
+.navbar-links {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+  margin-right: 200px;
+}
+
+.navbar-links li {
+  margin-right: 10px; /* Adjust spacing between links */
+}
+
 .Nav a {
-  margin-right: 100px;
   color: black;
   text-decoration: none;
+  padding: 8px 16px;
+  background-color: #b0d3e6;
+  border-radius: 5px;
 }
+
+.logo {
+  width: 120px;
+  height: auto;
+}
+
 /* .Nav nav {
 }
 
