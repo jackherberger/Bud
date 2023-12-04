@@ -1,66 +1,101 @@
-import React, { useEffect, useState } from "react";
-import ChartComponent from "./ChartComponent";
-import "./AccountDisplay.css";
+import React, { useEffect, useState } from "react"
+import ChartComponent from "./ChartComponent"
+import "./AccountDisplay.css"
 
 function AccountDisplay(props) {
-  const accountId = "654f1da3a472ccdb5403c95d"; // sample id
   const [info, setInfo] = useState({
     balance: 0,
     income: 0,
     saving: 0,
-  });
-  const [amount, setAmount] = useState(0);
-  const [transactionType, setTransactionType] = useState("+"); // + for deposit, - for withdraw
-  const [selectedAccount, setSelectedAccount] = useState("balance");
+    spending: 0,
+  })
+  const [amount, setAmount] = useState(0)
+  const [transactionType, setTransactionType] = useState("+") // + for deposit, - for withdr
+  const [selectedAccount, setSelectedAccount] = useState("balance")
 
+  const adjustedBalance = info.balance - info.spending
+
+  useEffect(() => {
+    console.log("useEffect in AccountDisplay triggered")
+    getInfo()
+  }, [props.accountId, props.customerId])
+
+  // Get the info needed for account from accounts and transaction
   function getInfo() {
-    fetch("http://localhost:8000/account/" + props.accountId)
-      .then((res) => res.json())
-      .then((json) => setInfo(json.account[0]))
+    Promise.all([
+      fetch("http://localhost:8000/account/" + props.accountId).then((res) =>
+        res.json()
+      ),
+      fetch("http://localhost:8000/transactions/" + props.customerId).then(
+        (res) => res.json()
+      ),
+    ])
+      .then(([accountData, transactions]) => {
+        // Extract necessary data from the responses
+        const accountInfo = accountData.account[0]
+        console.log(accountInfo)
+        const spendingList = transactions[0].transaction_list
+        console.log(transactions)
+
+        // Calculate total spending
+        const totalSpending = spendingList.reduce(
+          (acc, transaction) => acc + parseInt(transaction.price, 10),
+          0
+        )
+        accountInfo.spending = totalSpending
+
+        accountInfo.balance -= totalSpending
+
+        // Update state or perform other actions with the data
+        setInfo(accountInfo)
+      })
       .catch((error) => {
-        console.log(error);
-      });
+        console.log(error)
+      })
   }
 
+  // Update the account when adding or subtracting to the three catagories
   function updateAccount(type) {
-    let newAmount = 0;
+    let newAmount = 0
     if (type === "+") {
-      newAmount = info[selectedAccount] + amount;
+      newAmount = info[selectedAccount] + amount
     } else if (type === "-") {
-      newAmount = info[selectedAccount] - amount;
+      newAmount = info[selectedAccount] - amount
     }
 
-    fetch(`http://localhost:8000/account/${props.accountId}/${selectedAccount}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        [selectedAccount]: newAmount,
-      }),
-    })
+    fetch(
+      `http://localhost:8000/account/${props.accountId}/${selectedAccount}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          [selectedAccount]: newAmount,
+        }),
+      }
+    )
       .then((res) => {
         if (res.ok) {
-          setInfo({ ...info, [selectedAccount]: newAmount });
-          setAmount(0);
+          console.log(selectedAccount)
+          console.log(props.accountId)
+          setInfo({ ...info, [selectedAccount]: newAmount })
+          setAmount(0)
         }
       })
       .catch((error) => {
-        console.log(error);
-      });
+        console.log(error)
+      })
   }
-
-  useEffect(() => {
-    getInfo();
-  }, []);
 
   return (
     <React.Fragment>
       <div>
         <h1>Account</h1>
-        <h2>Balance: ${info.balance}</h2>
+        <h2>Balance: ${adjustedBalance}</h2>
         <h2>Income: ${info.income}</h2>
         <h2>Savings: ${info.saving}</h2>
+        <h2>Spendings: ${info.spending}</h2>
       </div>
       <div className="input-container">
         <input
@@ -101,10 +136,15 @@ function AccountDisplay(props) {
         </button>
       </div>
       <div className="chart-container">
-        <ChartComponent data={info} />
+        <ChartComponent
+          balance={adjustedBalance}
+          income={info.income}
+          savings={info.saving}
+          spendings={info.spending}
+        />
       </div>
     </React.Fragment>
-  );
+  )
 }
 
-export default AccountDisplay;
+export default AccountDisplay

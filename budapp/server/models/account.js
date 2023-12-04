@@ -1,5 +1,4 @@
-import mongoose from "mongoose";
-// const mongoose = require("mongoose");
+import mongoose from "mongoose"
 
 const AccountSchema = new mongoose.Schema(
   {
@@ -33,7 +32,6 @@ const AccountSchema = new mongoose.Schema(
   },
   { collection: "accounts_list" },
   { bufferTimeoutMS: 1000 }
-);
-
-const Account = mongoose.model("Account", AccountSchema);
-export default Account;
+)
+const Account = mongoose.model("Account", AccountSchema)
+export default Account
