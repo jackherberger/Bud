@@ -19,7 +19,7 @@ function AccountDisplay(props) {
   const adjustedBalance = info.balance - info.spending
 
   function addAuthHeader(otherHeaders = {}) {
-    if (token === null || token === INVALID_TOKEN) {
+    if (token === INVALID_TOKEN) {
       return otherHeaders
     } else {
       return {
