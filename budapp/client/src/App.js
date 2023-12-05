@@ -99,9 +99,9 @@ function App() {
         // Update spending in the accounts database
         fetch(`http://localhost:8000/account/${accountId}/spending`, {
           method: "PATCH",
-          headers: {
+          headers: addAuthHeader({
             "Content-Type": "application/json",
-          },
+          }),
           body: JSON.stringify({
             spending: totalSpending,
           }),
