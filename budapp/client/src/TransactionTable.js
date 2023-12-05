@@ -54,8 +54,9 @@ function TransactionTable({ setTransactions, customerId, transactions, onAddTran
         console.error("Error fetching transactions:", error);
       }
     };
-
-    fetchTransactionInfo();
+    if (token !== null && token !== INVALID_TOKEN) {
+      fetchTransactionInfo();
+    }
   }, []);
 
   const handleInputChange = (e) => {

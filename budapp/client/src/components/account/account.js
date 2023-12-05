@@ -19,7 +19,7 @@ function AccountDisplay(props) {
   const adjustedBalance = info.balance - info.spending
 
   function addAuthHeader(otherHeaders = {}) {
-    if (token === INVALID_TOKEN) {
+    if (token === null || token === INVALID_TOKEN) {
       return otherHeaders
     } else {
       return {
@@ -31,51 +31,56 @@ function AccountDisplay(props) {
 
   useEffect(() => {
     console.log("useEffect in AccountDisplay triggered")
-    getInfo()
+    if (token !== null && token !== INVALID_TOKEN) {
+      getInfo()
+    }
   }, [props.accountId, props.customerId])
 
   // Get the info needed for account from accounts and transaction
   function getInfo() {
-    Promise.all([
-      fetch("http://localhost:8000/account/" + props.accountId, {
-        method: "GET",
-        headers: addAuthHeader({
-          "Content-Type": "application/json",
-        }),
-      })
-        .then((res) => res.json()),
-      fetch("http://localhost:8000/transactions/" + props.customerId, {
-        method: "GET",
-        headers: addAuthHeader({
-          "Content-Type": "application/json",
-        }),
-      }).then(
-        (res) => res.json()
-      ),
-    ])
-      .then(([accountData, transactions]) => {
-        // Extract necessary data from the responses
-        const accountInfo = accountData.account[0]
-        setInfo(accountInfo)
-        console.log(accountInfo)
-        const spendingList = transactions[0].transaction_list
-        console.log(spendingList)
+    if (token !== null && token !== INVALID_TOKEN) {
+      console.log(token)
+      Promise.all([
+        fetch("http://localhost:8000/account/" + props.accountId, {
+          method: "GET",
+          headers: addAuthHeader({
+            "Content-Type": "application/json",
+          }),
+        })
+          .then((res) => res.json()),
+        fetch("http://localhost:8000/transactions/" + props.customerId, {
+          method: "GET",
+          headers: addAuthHeader({
+            "Content-Type": "application/json",
+          }),
+        }).then(
+          (res) => res.json()
+        ),
+      ])
+        .then(([accountData, transactions]) => {
+          // Extract necessary data from the responses
+          const accountInfo = accountData.account[0]
+          setInfo(accountInfo)
+          console.log(accountInfo)
+          const spendingList = transactions[0].transaction_list
+          console.log(spendingList)
 
-        // Calculate total spending
-        const totalSpending = spendingList.reduce(
-          (acc, transaction) => acc + parseInt(transaction.price, 10),
-          0
-        )
-        accountInfo.spending = totalSpending
+          // Calculate total spending
+          const totalSpending = spendingList.reduce(
+            (acc, transaction) => acc + parseInt(transaction.price, 10),
+            0
+          )
+          accountInfo.spending = totalSpending
 
-        accountInfo.balance -= totalSpending
+          accountInfo.balance -= totalSpending
 
-        // Update state or perform other actions with the data
-        setInfo(accountInfo)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+          // Update state or perform other actions with the data
+          setInfo(accountInfo)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    }
   }
 
   // Update the account when adding or subtracting to the three catagories
