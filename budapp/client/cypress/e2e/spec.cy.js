@@ -15,8 +15,8 @@ describe("The home page", () => {
 describe("The login page + transaction page", () => {
   it("let's us login and add a transaction", () => {
     const testdata = {
-      username: "horse@gamil",
-      password: "ppopeede",
+      username: "igloo405@gmail.com",
+      password: "123456789",
     };
     cy.visit("http://localhost:3000/login");
     cy.get('input[name="username"]').type(testdata.username);
@@ -45,7 +45,7 @@ describe("The login page + transaction page", () => {
 describe("The signup page", () => {
   // this data will need to be changed after each test
   const signupdata = {
-    email: "iloo12345567@calpoly.edu",
+    email: "iloo123455678@calpoly.edu",
     firstName: "Ian",
     lastName: "Loo",
     password: "igloo12345",
@@ -59,7 +59,7 @@ describe("The signup page", () => {
     cy.get('input[name="password"]').type(signupdata.password);
     cy.get('input[name="confirmPassword"]').type(signupdata.confirmPassword);
     cy.get('button[value="signup"]').click();
-    cy.url().should("include", "/transactions");
+    cy.url().should("include", "/login");
   });
 });
 
