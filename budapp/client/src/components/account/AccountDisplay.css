@@ -1,3 +1,12 @@
+.account-display {
+  display:block;
+  padding: 8px;
+  opacity: 1;
+}
+.account-display h2 {
+  opacity: 1;
+}
+
 .input-container {
   display: flex;
   flex-direction: column;

@@ -32,7 +32,8 @@ function App() {
   }
   // fetch customer info once login - if token invalid, don't fetch - maybe add "PLEASE LOGIN"
   useEffect(() => {
-    if (token !== INVALID_TOKEN) {
+    if (token !== null && token !== INVALID_TOKEN) {
+      console.log(token)
       const fetchCustomerInfo = async () => {
         try {
           console.log("in trans customerId:", customerId)
@@ -60,9 +61,9 @@ function App() {
         }
       }
       fetchCustomerInfo()
-      if (customerId) {
-        console.log("logged in", customerId, accountId)
-      }
+    }
+    if (customerId) {
+      console.log("logged in", customerId, accountId)
     }
   }, [customerId])
 
@@ -71,7 +72,7 @@ function App() {
   //   setTransactions([...transactions, newTransaction]);
   // };
   const onAddTransaction = async (newTransaction) => {
-    if (token !== INVALID_TOKEN) {
+    if (token !== null && token !== INVALID_TOKEN) {
       try {
         const response = await fetch(
           `http://localhost:8000/transactions/${customerId}`,
@@ -99,9 +100,9 @@ function App() {
         // Update spending in the accounts database
         fetch(`http://localhost:8000/account/${accountId}/spending`, {
           method: "PATCH",
-          headers: {
+          headers: addAuthHeader({
             "Content-Type": "application/json",
-          },
+          }),
           body: JSON.stringify({
             spending: totalSpending,
           }),
