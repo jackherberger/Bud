@@ -16,8 +16,6 @@ function AccountDisplay(props) {
   const INVALID_TOKEN = "INVALID_TOKEN" // for token usage and passes valid authenticated requests
   const [token, setToken] = useState(localStorage.getItem("token"))
 
-  const [spendingSubtracted, setSpendingSubtracted] = useState(false)
-
   const adjustedBalance = info.balance - info.spending
 
   function addAuthHeader(otherHeaders = {}) {
@@ -36,7 +34,7 @@ function AccountDisplay(props) {
     if (token !== null && token !== INVALID_TOKEN) {
       getInfo()
     }
-  }, [props.accountId])
+  }, [props.accountId, props.customerId])
 
   // Get the info needed for account from accounts and transaction
   function getInfo() {
