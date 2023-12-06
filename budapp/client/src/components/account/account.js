@@ -46,24 +46,18 @@ function AccountDisplay(props) {
           headers: addAuthHeader({
             "Content-Type": "application/json",
           }),
-        })
-          .then((res) => res.json()),
+        }).then((res) => res.json()),
         fetch("http://localhost:8000/transactions/" + props.customerId, {
           method: "GET",
           headers: addAuthHeader({
             "Content-Type": "application/json",
           }),
-        }).then(
-          (res) => res.json()
-        ),
+        }).then((res) => res.json()),
       ])
         .then(([accountData, transactions]) => {
           // Extract necessary data from the responses
           const accountInfo = accountData.account[0]
-          setInfo(accountInfo)
-          console.log(accountInfo)
           const spendingList = transactions[0].transaction_list
-          console.log(spendingList)
 
           // Calculate total spending
           const totalSpending = spendingList.reduce(
@@ -71,8 +65,6 @@ function AccountDisplay(props) {
             0
           )
           accountInfo.spending = totalSpending
-
-          accountInfo.balance -= totalSpending
 
           // Update state or perform other actions with the data
           setInfo(accountInfo)
@@ -120,7 +112,7 @@ function AccountDisplay(props) {
   return (
     <React.Fragment>
       <div className="account-display">
-      <h1>Account</h1>
+        <h1>Account</h1>
         <h2>Balance: {adjustedBalance}</h2>
         <h2>Income: {info.income}</h2>
         <h2>Savings: {info.saving}</h2>
