@@ -3,13 +3,17 @@ import bcrypt from "bcryptjs";
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import "./login.css";
+const baseUrl = process.env.REACT_APP_API_URL || "http://localhost:8000";
+// const baseUrl = "http://localhost:8000";
 
 const Login = (props) => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const INVALID_TOKEN = "INVALID_TOKEN";
-  const [token, setToken] = useState(localStorage.setItem("token", INVALID_TOKEN));
+  const [token, setToken] = useState(
+    localStorage.setItem("token", INVALID_TOKEN)
+  );
 
   const [error, setError] = useState("");
 
@@ -26,11 +30,11 @@ const Login = (props) => {
   const onSetToken = (token) => {
     localStorage.setItem("token", token);
     setToken(token);
-  }
+  };
 
   const handleLogin = async () => {
     try {
-      const response = await fetch("http://localhost:8000/checkLogin", {
+      const response = await fetch(`${baseUrl}/checkLogin`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -49,7 +53,7 @@ const Login = (props) => {
       if (response.ok) {
         // Successful login logic here
         console.log("Login successful!");
-        navigate("/transactions")
+        navigate("/transactions");
       } else {
         // Failed login logic here
         setError("Login failed. Invalid username or password.");

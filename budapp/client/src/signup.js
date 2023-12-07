@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import "./login.css";
 import "./signup.css";
 import { useNavigate } from "react-router-dom";
+const baseUrl = process.env.REACT_APP_API_URL || "http://localhost:8000";
+// const baseUrl = "http://localhost:8000";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -30,7 +32,7 @@ const SignUp = () => {
     const pass = formData.confirmPassword;
 
     try {
-      const response = await fetch("http://localhost:8000/users", {
+      const response = await fetch(`${baseUrl}/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -45,7 +47,7 @@ const SignUp = () => {
       if (response.ok) {
         // Successful sign-up logic  - moves user to login page after delay
         console.log("User signed up successfully!");
-        navigate('/login');
+        navigate("/login");
       } else if (response.status === 409) {
         setError("Email already used. Please choose another email.");
         console.log("User already exists");
