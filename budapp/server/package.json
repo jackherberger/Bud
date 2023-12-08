@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "jest --runInBand ./models",
-    "start": "nodemon index.js",
+    "start": "node index.js",
     "lint": "npx eslint . && npx prettier --check ."
   },
   "keywords": [],
