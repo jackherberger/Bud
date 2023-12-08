@@ -16,8 +16,8 @@ const app = express(express.json());
 app.use(cors());
 app.use(express.json());
 
-app.listen(process.env.PORT || port, () => {
-  console.log("REST API is listening.");
+app.listen(process.env.PORT || PORT, () => {
+  console.log(`Server listening on ${PORT}`);
 });
 
 app.get("/users", authenticateUser, async (req, res) => {

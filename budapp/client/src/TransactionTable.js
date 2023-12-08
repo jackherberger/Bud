@@ -1,9 +1,16 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./TransactionTable.css";
+const baseUrl = process.env.REACT_APP_API_URL || "http://localhost:8000";
+// const baseUrl = "http://localhost:8000";
 
-function TransactionTable({ setTransactions, customerId, transactions, onAddTransaction }) {
+function TransactionTable({
+  setTransactions,
+  customerId,
+  transactions,
+  onAddTransaction,
+}) {
   const INVALID_TOKEN = "INVALID_TOKEN";
   const [token, setToken] = useState(localStorage.getItem("token"));
   const categories = [
@@ -24,7 +31,7 @@ function TransactionTable({ setTransactions, customerId, transactions, onAddTran
     } else {
       return {
         ...otherHeaders,
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       };
     }
   }
@@ -42,10 +49,10 @@ function TransactionTable({ setTransactions, customerId, transactions, onAddTran
   useEffect(() => {
     const fetchTransactionInfo = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/transactions/${customerId}`, {
+        const response = await fetch(`${baseUrl}/transactions/${customerId}`, {
           method: "GET",
           headers: addAuthHeader({
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
           }),
         });
         const data = await response.json();
