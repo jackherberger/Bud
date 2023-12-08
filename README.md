@@ -56,10 +56,10 @@ ESLint is used to enforce coding standards. To run the linter, run `npm run lint
 
 Prettier is used to enforce code formatting. Have it installed as an extension in your editor.
 
-# Demo Video Link
-https://youtu.be/GjaKc4YCfr4
-
 ## Contributing
 
 ESLint is using the latest ECMAScript version.
 Some rules we disable are: quotes, semi, comma-dangle, space-before-function-paren
+
+# Demo Video Link
+https://youtu.be/GjaKc4YCfr4
