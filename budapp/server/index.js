@@ -10,14 +10,14 @@ dotenv.config();
 import TransactionServices from "./models/transactionServices.js";
 import CustomerServices from "./models/customerServices.js";
 
-const port = 8000;
+const port = process.env.PORT || 8000;
 
 const app = express(express.json());
 app.use(cors());
 app.use(express.json());
 
-app.listen(process.env.PORT || PORT, () => {
-  console.log(`Server listening on ${PORT}`);
+app.listen(port, () => {
+  console.log(`Server listening on ${port}`);
 });
 
 app.get("/users", authenticateUser, async (req, res) => {
