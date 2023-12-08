@@ -27,6 +27,7 @@
     "budapp/*"
   ],
   "devDependencies": {
+    "eslint": "^8.55.0",
     "nodemon": "^3.0.2"
   }
 }

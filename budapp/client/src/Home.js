@@ -1,25 +1,25 @@
-import React, { useEffect, useRef } from "react"
-import "./Home.css"
-import { useInView } from "react-intersection-observer"
+import React, { useEffect } from 'react'
+import './Home.css'
+import { useInView } from 'react-intersection-observer'
 
 const Home = () => {
   const [ref, inView] = useInView({
     triggerOnce: true,
-    threshold: 0.2,
+    threshold: 0.2
   })
 
   useEffect(() => {
     if (inView) {
-      document.querySelector(".Home").classList.add("is-visible")
+      document.querySelector('.Home').classList.add('is-visible')
     }
   }, [inView])
 
   return (
-    <div className="Home" ref={ref}>
+    <div className='Home' ref={ref}>
       <h1> Bud™️ </h1>
       <p>The smart transaction tracker.</p>
       <p>
-        Welcome to Bud - <b>Your Intelligent Financial Companion!</b> <br></br>{" "}
+        Welcome to Bud - <b>Your Intelligent Financial Companion!</b> <br></br>{' '}
         <br></br>
         Are you tired of the constant struggle to keep tabs on your purchases?
         Are you yearning for a tool that not only tracks your transactions but

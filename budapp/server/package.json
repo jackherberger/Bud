@@ -31,7 +31,7 @@
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "chart.js": "^4.4.0",
-    "eslint": "^8.53.0",
+    "eslint": "^8.55.0",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-react": "^7.33.2",
     "lint": "^0.8.19",

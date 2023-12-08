@@ -1,24 +1,23 @@
-import React, { useState, useEffect } from "react"
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
-import TransactionTable from "./TransactionTable"
-import CategoryPieChart from "./CategoryPieChart"
-import DateBarChart from "./DateBarChart"
-import "./App.css"
-import Login from "./login"
-import SignUp from "./signup"
-import Navbar from "./Navbar"
-import Home from "./Home"
-import AccountDisplay from "./components/account/account"
-import { set } from "mongoose"
+import React, { useState, useEffect } from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import TransactionTable from './TransactionTable'
+import CategoryPieChart from './CategoryPieChart'
+import DateBarChart from './DateBarChart'
+import './App.css'
+import Login from './login'
+import SignUp from './signup'
+import Navbar from './Navbar'
+import Home from './Home'
+import AccountDisplay from './components/account/account'
 
 function App() {
   const [transactions, setTransactions] = useState([])
   const [customerId, setCustomerId] = useState(
-    localStorage.getItem("customerId")
+    localStorage.getItem('customerId')
   )
-  const [accountId, setAccountId] = useState(localStorage.getItem("accountId"))
-  const INVALID_TOKEN = "INVALID_TOKEN"
-  const [token, setToken] = useState(localStorage.getItem("token"))
+  const [accountId, setAccountId] = useState(localStorage.getItem('accountId'))
+  const INVALID_TOKEN = 'INVALID_TOKEN'
+  const [token, setToken] = useState(localStorage.getItem('token'))
 
   function addAuthHeader(otherHeaders = {}) {
     if (token === INVALID_TOKEN) {
@@ -26,7 +25,7 @@ function App() {
     } else {
       return {
         ...otherHeaders,
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`
       }
     }
   }
@@ -36,14 +35,14 @@ function App() {
       console.log(token)
       const fetchCustomerInfo = async () => {
         try {
-          console.log("in trans customerId:", customerId)
+          console.log('in trans customerId:', customerId)
           const response = await fetch(
             `http://localhost:8000/transactions/${customerId}`,
             {
-              method: "GET",
+              method: 'GET',
               headers: addAuthHeader({
-                "Content-Type": "application/json",
-              }),
+                'Content-Type': 'application/json'
+              })
             }
           )
           const data = await response
@@ -57,13 +56,13 @@ function App() {
           setTransactions(data.transaction_list)
           onSetAccountId(data.account)
         } catch (error) {
-          console.error("Error fetching transactions:", error)
+          console.error('Error fetching transactions:', error)
         }
       }
       fetchCustomerInfo()
     }
     if (customerId) {
-      console.log("logged in", customerId, accountId)
+      console.log('logged in', customerId, accountId)
     }
   }, [customerId])
 
@@ -77,11 +76,11 @@ function App() {
         const response = await fetch(
           `http://localhost:8000/transactions/${customerId}`,
           {
-            method: "POST",
+            method: 'POST',
             headers: addAuthHeader({
-              "Content-Type": "application/json",
+              'Content-Type': 'application/json'
             }),
-            body: JSON.stringify(newTransaction),
+            body: JSON.stringify(newTransaction)
           }
         )
 
@@ -99,55 +98,55 @@ function App() {
 
         // Update spending in the accounts database
         fetch(`http://localhost:8000/account/${accountId}/spending`, {
-          method: "PATCH",
+          method: 'PATCH',
           headers: addAuthHeader({
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json'
           }),
           body: JSON.stringify({
-            spending: totalSpending,
-          }),
+            spending: totalSpending
+          })
         })
           .then((res) => {
             if (res.ok) {
-              console.log("Spending updated successfully in the database")
+              console.log('Spending updated successfully in the database')
             } else {
-              console.log("Failed to update spending in the database")
+              console.log('Failed to update spending in the database')
             }
           })
           .catch((error) => {
-            console.error("Error updating spending in the database:", error)
+            console.error('Error updating spending in the database:', error)
           })
       } catch (error) {
-        console.error("Error adding transaction:", error)
+        console.error('Error adding transaction:', error)
       }
     }
   }
 
   const onSetCustomerId = (customerId) => {
-    localStorage.setItem("customerId", customerId)
+    localStorage.setItem('customerId', customerId)
     setCustomerId(customerId)
   }
 
   const onSetAccountId = (accountId) => {
-    localStorage.setItem("accountId", accountId)
+    localStorage.setItem('accountId', accountId)
     setAccountId(accountId)
   }
   return (
-    <div className="App">
+    <div className='App'>
       <Router>
         <Navbar />
         <Routes>
-          <Route exact path="/" element={<Home />}></Route>
+          <Route exact path='/' element={<Home />}></Route>
           <Route
             exact
-            path="/login"
+            path='/login'
             element={<Login setCustomerId={onSetCustomerId} />}
           />
-          <Route path="/signup" element={<SignUp />} />
+          <Route path='/signup' element={<SignUp />} />
           <Route
-            path="/transactions"
+            path='/transactions'
             element={
-              <div style={{ display: "flex" }}>
+              <div style={{ display: 'flex' }}>
                 <div style={{ flex: 2 }}>
                   <TransactionTable
                     transactions={transactions}
@@ -169,7 +168,7 @@ function App() {
             }
           />
           <Route
-            path="/account"
+            path='/account'
             element={
               <AccountDisplay accountId={accountId} customerId={customerId} />
             }

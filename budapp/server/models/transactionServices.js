@@ -1,11 +1,9 @@
-/* eslint-disable require-jsdoc */
-import mongoose from "mongoose"
-import TransactionModel from "./transaction.js"
-import CustomerModel from "./customer.js"
-import { ObjectId } from "mongodb"
+import mongoose from 'mongoose'
+import TransactionModel from './transaction.js'
+import CustomerModel from './customer.js'
+import { ObjectId } from 'mongodb'
 
-mongoose.set("debug", true)
-const connectionString = `mongodb://localhost:27017/mongo`
+mongoose.set('debug', true)
 
 async function addTransaction(transaction, customerId) {
   try {
@@ -18,7 +16,7 @@ async function addTransaction(transaction, customerId) {
     )
     return result
   } catch (error) {
-    console.error("Error adding transaction:", error)
+    console.error('Error adding transaction:', error)
     throw error
   }
 }
@@ -30,12 +28,12 @@ async function getTransactions(customerId) {
 
     return transactions
   } catch (error) {
-    console.error("Error getting transactions:", error)
+    console.error('Error getting transactions:', error)
     throw error
   }
 }
 
 export default {
   addTransaction,
-  getTransactions,
+  getTransactions
 }

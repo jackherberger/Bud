@@ -1,43 +1,43 @@
 // LineChartComponent.js
-import React, { useEffect, useRef } from "react";
-import Chart from "chart.js/auto";
+import React, { useEffect, useRef } from 'react'
+import Chart from 'chart.js/auto'
 
 function LineChartComponent({ data }) {
-  const chartRef = useRef(null);
+  const chartRef = useRef(null)
 
   useEffect(() => {
-    let newChartInstance = null;
+    let newChartInstance = null
 
     if (chartRef.current && data) {
       if (chartRef.current.chart) {
-        chartRef.current.chart.destroy();
+        chartRef.current.chart.destroy()
       }
 
-      const ctx = chartRef.current.getContext("2d");
+      const ctx = chartRef.current.getContext('2d')
       newChartInstance = new Chart(ctx, {
-        type: "line",
+        type: 'line',
         data: {
-          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"], // Sample labels (months)
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'], // Sample labels (months)
           datasets: [
             {
-              label: "Balance",
+              label: 'Balance',
               data: data.balanceData, // An array of balance data over time
-              borderColor: "blue",
-              fill: false,
+              borderColor: 'blue',
+              fill: false
             },
             {
-              label: "Income",
+              label: 'Income',
               data: data.incomeData, // An array of income data over time
-              borderColor: "orange",
-              fill: false,
+              borderColor: 'orange',
+              fill: false
             },
             {
-              label: "Savings",
+              label: 'Savings',
               data: data.savingsData, // An array of savings data over time
-              borderColor: "green",
-              fill: false,
-            },
-          ],
+              borderColor: 'green',
+              fill: false
+            }
+          ]
         },
         options: {
           responsive: true,
@@ -46,33 +46,33 @@ function LineChartComponent({ data }) {
             x: {
               title: {
                 display: true,
-                text: "Time",
-              },
+                text: 'Time'
+              }
             },
             y: {
               title: {
                 display: true,
-                text: "Amount",
+                text: 'Amount'
               },
-              beginAtZero: true,
-            },
-          },
-        },
-      });
+              beginAtZero: true
+            }
+          }
+        }
+      })
     }
 
     return () => {
       if (newChartInstance) {
-        newChartInstance.destroy();
+        newChartInstance.destroy()
       }
-    };
-  }, [data]);
+    }
+  }, [data])
 
   return (
-    <div style={{ width: "400px", margin: "20px" }}>
+    <div style={{ width: '400px', margin: '20px' }}>
       <canvas ref={chartRef} />
     </div>
-  );
+  )
 }
 
-export default LineChartComponent;
+export default LineChartComponent

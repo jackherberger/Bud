@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from "react"
-import ChartComponent from "./ChartComponent"
-import "./AccountDisplay.css"
+import React, { useEffect, useState } from 'react'
+import ChartComponent from './ChartComponent'
+import './AccountDisplay.css'
 
 function AccountDisplay(props) {
   const [info, setInfo] = useState({
     balance: 0,
     income: 0,
     saving: 0,
-    spending: 0,
+    spending: 0
   })
 
   const [amount, setAmount] = useState(0)
-  const [transactionType, setTransactionType] = useState("+") // + for deposit, - for withdr
-  const [selectedAccount, setSelectedAccount] = useState("balance")
-  const INVALID_TOKEN = "INVALID_TOKEN" // for token usage and passes valid authenticated requests
-  const [token, setToken] = useState(localStorage.getItem("token"))
+  const [transactionType, setTransactionType] = useState('+') // + for deposit, - for withdr
+  const [selectedAccount, setSelectedAccount] = useState('balance')
+  const INVALID_TOKEN = 'INVALID_TOKEN' // for token usage and passes valid authenticated requests
+  const [token, setToken] = useState(localStorage.getItem('token'))
 
   const adjustedBalance = info.balance - info.spending
 
@@ -24,13 +24,13 @@ function AccountDisplay(props) {
     } else {
       return {
         ...otherHeaders,
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`
       }
     }
   }
 
   useEffect(() => {
-    console.log("useEffect in AccountDisplay triggered")
+    console.log('useEffect in AccountDisplay triggered')
     if (token !== null && token !== INVALID_TOKEN) {
       getInfo()
     }
@@ -41,18 +41,18 @@ function AccountDisplay(props) {
     if (token !== null && token !== INVALID_TOKEN) {
       console.log(token)
       Promise.all([
-        fetch("http://localhost:8000/account/" + props.accountId, {
-          method: "GET",
+        fetch('http://localhost:8000/account/' + props.accountId, {
+          method: 'GET',
           headers: addAuthHeader({
-            "Content-Type": "application/json",
-          }),
+            'Content-Type': 'application/json'
+          })
         }).then((res) => res.json()),
-        fetch("http://localhost:8000/transactions/" + props.customerId, {
-          method: "GET",
+        fetch('http://localhost:8000/transactions/' + props.customerId, {
+          method: 'GET',
           headers: addAuthHeader({
-            "Content-Type": "application/json",
-          }),
-        }).then((res) => res.json()),
+            'Content-Type': 'application/json'
+          })
+        }).then((res) => res.json())
       ])
         .then(([accountData, transactions]) => {
           // Extract necessary data from the responses
@@ -78,22 +78,22 @@ function AccountDisplay(props) {
   // Update the account when adding or subtracting to the three catagories
   function updateAccount(type) {
     let newAmount = 0
-    if (type === "+") {
+    if (type === '+') {
       newAmount = info[selectedAccount] + amount
-    } else if (type === "-") {
+    } else if (type === '-') {
       newAmount = info[selectedAccount] - amount
     }
 
     fetch(
       `http://localhost:8000/account/${props.accountId}/${selectedAccount}`,
       {
-        method: "PATCH",
+        method: 'PATCH',
         headers: addAuthHeader({
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json'
         }),
         body: JSON.stringify({
-          [selectedAccount]: newAmount,
-        }),
+          [selectedAccount]: newAmount
+        })
       }
     )
       .then((res) => {
@@ -111,52 +111,52 @@ function AccountDisplay(props) {
 
   return (
     <React.Fragment>
-      <div className="account-display">
+      <div className='account-display'>
         <h1>Account</h1>
         <h2>Balance: {adjustedBalance}</h2>
         <h2>Income: {info.income}</h2>
         <h2>Savings: {info.saving}</h2>
         <h2>Spendings: {info.spending}</h2>
       </div>
-      <div className="input-container">
+      <div className='input-container'>
         <input
-          type="number"
-          name="dollars"
+          type='number'
+          name='dollars'
           value={amount}
           onChange={(e) => setAmount(parseInt(e.target.value))}
-          className="amount-input"
+          className='amount-input'
         />
         <select
           value={transactionType}
-          name="transactionoption"
+          name='transactionoption'
           onChange={(e) => setTransactionType(e.target.value)}
-          className="transaction-select"
+          className='transaction-select'
         >
-          <option value="+">Deposit</option>
-          <option value="-">Withdraw</option>
+          <option value='+'>Deposit</option>
+          <option value='-'>Withdraw</option>
         </select>
         <select
           value={selectedAccount}
-          name="accountoption"
+          name='accountoption'
           onChange={(e) => setSelectedAccount(e.target.value)}
-          className="account-select"
+          className='account-select'
         >
-          <option value="balance">Balance</option>
-          <option value="income">Income</option>
-          <option value="saving">Savings</option>
+          <option value='balance'>Balance</option>
+          <option value='income'>Income</option>
+          <option value='saving'>Savings</option>
         </select>
         <button
-          value="deposit"
+          value='deposit'
           onClick={() => updateAccount(transactionType)}
           className={`update-button ${
-            transactionType === "+" ? "deposit" : "withdraw"
+            transactionType === '+' ? 'deposit' : 'withdraw'
           }`}
         >
-          {transactionType === "+" ? "Deposit" : "Withdraw"} ${amount} to{" "}
+          {transactionType === '+' ? 'Deposit' : 'Withdraw'} ${amount} to{' '}
           {selectedAccount}
         </button>
       </div>
-      <div className="chart-container">
+      <div className='chart-container'>
         <ChartComponent
           balance={adjustedBalance}
           income={info.income}
