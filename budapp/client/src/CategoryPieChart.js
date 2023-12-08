@@ -21,7 +21,7 @@ const CategoryPieChart = ({ transactions }) => {
       if (!groups[category]) {
         groups[category] = 0;
       }
-      groups[category] += transaction.price;
+      groups[category] += parseInt(transaction.price);
       return groups;
     }, {});
 

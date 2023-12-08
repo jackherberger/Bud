@@ -10,7 +10,7 @@ const DateBarChart = ({ transactions }) => {
       if (!groups[date]) {
         groups[date] = 0
       }
-      groups[date] += transaction.price
+      groups[date] += parseInt(transaction.price)
       return groups
     }, {})
 
