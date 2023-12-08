@@ -11,8 +11,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\"",
-    "start-server": "nodemon -w budapp/server budapp/server/index.js",
-    "start-client": "nodemon -w budapp/client budapp/client/src/index.js"
+    "start-server": "npm -w server start",
+    "start-client": "npm -w client start"
   },
   "repository": {
     "type": "git",
