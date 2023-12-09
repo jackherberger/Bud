@@ -1,14 +1,12 @@
 import express from 'express'
 import cors from 'cors'
-import bcrypt from 'bcryptjs'
 import UserServices from './models/userServices.js'
 import AccountServices from './models/accountServices.js'
-import { authenticateUser, loginUser } from './models/auth.js'
-import dotenv from 'dotenv'
-import userServices from './models/userServices.js'
-dotenv.config()
 import TransactionServices from './models/transactionServices.js'
 import CustomerServices from './models/customerServices.js'
+import { authenticateUser, loginUser } from './models/auth.js'
+import dotenv from 'dotenv'
+dotenv.config()
 
 const port = process.env.PORT || 8000
 
@@ -27,7 +25,7 @@ app.get('/users', authenticateUser, async (req, res) => {
 
 app.get('/transactions/:id', async (req, res) => {
   try {
-    const id = req.params['id']
+    const id = req.params.id
     const transactions = await TransactionServices.getTransactions(id)
     res.send(transactions)
   } catch (error) {
@@ -38,7 +36,7 @@ app.get('/transactions/:id', async (req, res) => {
 
 app.post('/transactions/:id', authenticateUser, async (req, res) => {
   try {
-    const id = req.params['id']
+    const id = req.params.id
     const transaction = req.body
     const result = await TransactionServices.addTransaction(transaction, id)
     res.status(201).json(result)
@@ -51,7 +49,7 @@ app.post('/transactions/:id', authenticateUser, async (req, res) => {
 app.post('/users', async (req, res) => {
   const { name, email, password } = req.body
   try {
-    const existingUser = await userServices.getUserByEmail(email)
+    const existingUser = await UserServices.getUserByEmail(email)
 
     if (existingUser) {
       // User already exists, return a 409 Conflict status
@@ -65,7 +63,7 @@ app.post('/users', async (req, res) => {
   try {
     // Create a new user
     const newaccount = await AccountServices.addAccount(0, 0, 0, 0)
-    //treat as new customer for now
+    // treat as new customer for now
     const newcustomer = await CustomerServices.addCustomer()
     const { promise: result, token: ourToken } = await UserServices.addUser(
       name,
@@ -74,14 +72,11 @@ app.post('/users', async (req, res) => {
       0
     )
     // now attach them
-    const attachaccount = await CustomerServices.attachAccountToCustomer(
+    await CustomerServices.attachAccountToCustomer(
       newaccount._id,
       newcustomer._id
     )
-    const attachcustomer = await CustomerServices.attachCustomerToUser(
-      newcustomer._id,
-      result._id
-    )
+    await CustomerServices.attachCustomerToUser(newcustomer._id, result._id)
 
     if (ourToken) res.status(201).send({ token: ourToken })
     else res.status(500).end()
@@ -93,22 +88,23 @@ app.post('/users', async (req, res) => {
 
 app.post('/checkLogin', loginUser)
 
-//account stuff
+// account stuff
 app.get('/account/:id', authenticateUser, async (req, res) => {
-  const id = req.params['id']
+  const id = req.params.id
   const result = await AccountServices.getAccountInfo(id)
-  if (result === undefined || result === null)
+  if (result === undefined || result === null) {
     res.status(404).send('Resource not found.')
-  else {
+  } else {
     res.send({ account: result })
   }
 })
 app.post('/account', authenticateUser, async (req, res) => {
+  let balance, income, spending, saving
   try {
-    const balance = req.body['balance']
-    const income = req.body['income']
-    const spending = req.body['spending']
-    const saving = req.body['saving']
+    balance = req.body.balance
+    income = req.body.income
+    spending = req.body.spending
+    saving = req.body.saving
   } catch (error) {
     console.log(error)
     res
@@ -129,17 +125,16 @@ app.post('/account', authenticateUser, async (req, res) => {
   } catch (error) {
     console.log(error)
     res.status(500).send('An error ocurred in the server.').end()
-    return
   }
 })
 
 app.patch('/account/:id/balance', authenticateUser, async (req, res) => {
-  const id = req.params['id']
+  const id = req.params.id
   try {
-    const newBalance = req.body['balance']
+    const newBalance = req.body.balance
     console.log(req.body)
     const result = await AccountServices.editAccountBalance(id, newBalance)
-    if (!result['matchedCount']) res.status(404).send('Resource not found.')
+    if (!result.matchedCount) res.status(404).send('Resource not found.')
     else {
       res.status(200).send({ account_list: result })
     }
@@ -151,17 +146,16 @@ app.patch('/account/:id/balance', authenticateUser, async (req, res) => {
         'An error ocurred in the server. Please check your req body for balance.'
       )
       .end()
-    return
   }
 })
 
 app.patch('/account/:id/income', authenticateUser, async (req, res) => {
-  const id = req.params['id']
+  const id = req.params.id
   try {
-    const newIncome = req.body['income']
+    const newIncome = req.body.income
     console.log(req.body)
     const result = await AccountServices.editAccountIncome(id, newIncome)
-    if (!result['matchedCount']) res.status(404).send('Resource not found.')
+    if (!result.matchedCount) res.status(404).send('Resource not found.')
     else {
       // if(result["upsertedCount"])
       //   res.send({account_list: result});
@@ -177,17 +171,16 @@ app.patch('/account/:id/income', authenticateUser, async (req, res) => {
         'An error ocurred in the server. Please check your req body for income.'
       )
       .end()
-    return
   }
 })
 
 app.patch('/account/:id/spending', authenticateUser, async (req, res) => {
-  const id = req.params['id']
+  const id = req.params.id
   try {
-    const newSpending = req.body['spending']
+    const newSpending = req.body.spending
     console.log(req.body)
     const result = await AccountServices.editAccountSpending(id, newSpending)
-    if (!result['matchedCount']) res.status(404).send('Resource not found.')
+    if (!result.matchedCount) res.status(404).send('Resource not found.')
     else {
       res.status(200).send({ account_list: result })
     }
@@ -198,17 +191,16 @@ app.patch('/account/:id/spending', authenticateUser, async (req, res) => {
         'An error ocurred in the server. Please check your req body for spending.'
       )
       .end()
-    return
   }
 })
 
 app.patch('/account/:id/saving', authenticateUser, async (req, res) => {
-  const id = req.params['id']
+  const id = req.params.id
   try {
-    const newSaving = req.body['saving']
+    const newSaving = req.body.saving
     console.log(req.body)
     const result = await AccountServices.editAccountSavings(id, newSaving)
-    if (!result['matchedCount']) res.status(404).send('Resource not found.')
+    if (!result.matchedCount) res.status(404).send('Resource not found.')
     else {
       // if(result["upsertedCount"])
       //   res.send({account_list: result});
@@ -224,16 +216,15 @@ app.patch('/account/:id/saving', authenticateUser, async (req, res) => {
         'An error ocurred in the server. Please check your req body for saving.'
       )
       .end()
-    return
   }
 })
 
 app.get('/customer/:id', authenticateUser, async (req, res) => {
-  const id = req.params['id']
+  const id = req.params.id
   const result = await CustomerServices.getCustomerInfo(id)
-  if (result === undefined || result === null)
+  if (result === undefined || result === null) {
     res.status(404).send('Resource not found.')
-  else {
+  } else {
     res.send({ customer: result })
   }
 })

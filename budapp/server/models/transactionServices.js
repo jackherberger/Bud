@@ -1,4 +1,3 @@
-/* eslint-disable require-jsdoc */
 import mongoose from 'mongoose'
 import TransactionModel from './transaction.js'
 import CustomerModel from './customer.js'

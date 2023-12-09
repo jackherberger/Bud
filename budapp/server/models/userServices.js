@@ -1,13 +1,9 @@
-/* eslint-disable require-jsdoc */
 import mongoose from 'mongoose'
-import { ObjectId, MongoClient, ServerApiVersion } from 'mongodb'
 import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
 import UserModel from './user.js'
 import CustomerModel from './customer.js'
 import TransactionModel from './transaction.js'
 import { generateAccessToken } from './auth.js'
-import AccountModel from './account.js'
 import dotenv from 'dotenv'
 dotenv.config()
 
@@ -25,7 +21,7 @@ mongoose
     console.error('MongoDB connection error:', err)
   })
 
-//add user - hash password - save model to DB - generateToken
+// add user - hash password - save model to DB - generateToken
 async function addUser(name, email, password, permissions) {
   const hash = await bcrypt
     .genSalt(10)
@@ -44,8 +40,7 @@ async function addUser(name, email, password, permissions) {
 }
 
 async function getUsers() {
-  let promise
-  promise = await UserModel.find()
+  const promise = await UserModel.find()
   return promise
 }
 

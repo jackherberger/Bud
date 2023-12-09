@@ -3,11 +3,12 @@ module.exports = {
     browser: true,
     es2021: true
   },
-  extends: ['google', 'plugin:react/recommended'],
+  extends: ['standard', 'plugin:react/recommended'],
   overrides: [
     {
       env: {
-        node: true
+        node: true,
+        mocha: true
       },
       files: ['.eslintrc.{js,cjs}'],
       parserOptions: {
@@ -22,10 +23,6 @@ module.exports = {
   plugins: ['react'],
   rules: {
     'no-unused-vars': 'off',
-    quotes: 'off',
-    semi: 'off',
-    'comma-dangle': 'off',
-    'space-before-function-paren': 'off',
-    code: 120
+    'space-before-function-paren': 'off'
   }
 }

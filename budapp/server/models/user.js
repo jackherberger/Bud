@@ -1,5 +1,4 @@
 import mongoose from 'mongoose'
-import Customer from './customer.js'
 
 const UserSchema = new mongoose.Schema(
   {

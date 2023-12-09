@@ -2,7 +2,6 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import UserServices from './userServices.js'
-import { useNavigate } from 'react-router-dom'
 dotenv.config()
 
 // Generates ACCCESS TOKEN
@@ -24,8 +23,8 @@ export function generateAccessToken(username) {
 }
 
 export async function authenticateUser(req, res, next) {
-  const authHeader = req.headers['authorization']
-  //Getting the 2nd part of the auth header (the token)
+  const authHeader = req.headers.authorization
+  // Getting the 2nd part of the auth header (the token)
   const token = authHeader && authHeader.split(' ')[1]
 
   if (!token) {

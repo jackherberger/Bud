@@ -1,6 +1,5 @@
 import mongoose from 'mongoose'
 import Transaction from './transaction.js'
-import Account from './account.js'
 
 const customerSchema = new mongoose.Schema(
   {

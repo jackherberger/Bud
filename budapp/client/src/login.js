@@ -42,6 +42,7 @@ const Login = (props) => {
         // Successful login logic here
         console.log('Login successful!')
         navigate('/transactions')
+        window.location.reload()
       } else {
         // Failed login logic here
         setError('Login failed. Invalid username or password.')

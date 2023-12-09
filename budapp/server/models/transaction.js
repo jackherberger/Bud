@@ -12,8 +12,9 @@ const transactionSchema = new mongoose.Schema(
       required: true,
       trim: true,
       validate(value) {
-        if (value.length < 2)
+        if (value.length < 2) {
           throw new Error('Invalid price, must be at least 2 characters.')
+        }
       }
     },
     date: {

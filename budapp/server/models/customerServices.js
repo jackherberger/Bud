@@ -1,6 +1,4 @@
-/* eslint-disable require-jsdoc */
 import mongoose from 'mongoose'
-import AccountModel from './account.js'
 import CustomerModel from './customer.js'
 import UserModel from './user.js'
 import { ObjectId } from 'mongodb'
