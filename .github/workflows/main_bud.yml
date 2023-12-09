@@ -6,7 +6,7 @@ name: Build and deploy Node.js app to Azure Web App - Bud
 on:
   push:
     branches:
-      - main
+      - cdtesting
   workflow_dispatch:
 
 jobs:
