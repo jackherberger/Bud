@@ -1,6 +1,6 @@
 // ChartComponent.js
-import React, { useEffect, useRef } from "react"
-import Chart from "chart.js/auto"
+import React, { useEffect, useRef } from 'react'
+import Chart from 'chart.js/auto'
 
 function ChartComponent({ balance, income, savings, spendings }) {
   const chartRef = useRef(null)
@@ -13,30 +13,30 @@ function ChartComponent({ balance, income, savings, spendings }) {
         chartRef.current.chart.destroy()
       }
 
-      const ctx = chartRef.current.getContext("2d")
+      const ctx = chartRef.current.getContext('2d')
       newChartInstance = new Chart(ctx, {
-        type: "bar",
+        type: 'bar',
         data: {
-          labels: ["Balance", "Income", "Savings", "Spendings"],
+          labels: ['Balance', 'Income', 'Savings', 'Spendings'],
           datasets: [
             {
-              label: "Amount",
+              label: 'Amount',
               data: [balance, income, savings, spendings],
-              backgroundColor: ["blue", "orange", "green", "red"], // Adjust colors
-              barThickness: 80, // Adjust bar width
-            },
-          ],
+              backgroundColor: ['blue', 'orange', 'green', 'red'], // Adjust colors
+              barThickness: 80 // Adjust bar width
+            }
+          ]
         },
         options: {
-          indexAxis: "x", // Change orientation to horizontal
+          indexAxis: 'x', // Change orientation to horizontal
           responsive: true,
           maintainAspectRatio: false,
           scales: {
             x: {
-              beginAtZero: true,
-            },
-          },
-        },
+              beginAtZero: true
+            }
+          }
+        }
       })
     }
 
@@ -48,7 +48,7 @@ function ChartComponent({ balance, income, savings, spendings }) {
   }, [balance, income, savings, spendings])
 
   return (
-    <div style={{ width: "500px", height: "250px", margin: "40px" }}>
+    <div style={{ width: '500px', height: '250px', margin: '40px' }}>
       <canvas ref={chartRef} />
     </div>
   )
