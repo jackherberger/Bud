@@ -27,10 +27,10 @@ async function addUser(name, email, password, permissions) {
     .genSalt(10)
     .then((salt) => bcrypt.hash(password, salt))
   const user = {
-    name: name,
-    email: email,
+    name,
+    email,
     password: hash,
-    permissions: permissions
+    permissions
   }
 
   const userToAdd = new UserModel(user)
@@ -57,8 +57,8 @@ async function getUserByEmail(email) {
 
 async function addCustomer(name, job) {
   const customer = {
-    name: name,
-    job: job
+    name,
+    job
   }
   const customerToAdd = new CustomerModel(customer)
   const promise = await customerToAdd.save()
@@ -67,10 +67,10 @@ async function addCustomer(name, job) {
 
 async function addTransaction(amount, category, date, description) {
   const transaction = {
-    amount: amount,
-    category: category,
-    date: date,
-    description: description
+    amount,
+    category,
+    date,
+    description
   }
   const transactionToAdd = new TransactionModel(transaction)
   const promise = await transactionToAdd.save()

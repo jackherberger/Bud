@@ -8,7 +8,7 @@ dotenv.config()
 export function generateAccessToken(username) {
   return new Promise((resolve, reject) => {
     jwt.sign(
-      { username: username },
+      { username },
       process.env.TOKEN_SECRET,
       { expiresIn: '1d' },
       (error, token) => {
@@ -57,7 +57,7 @@ export async function loginUser(req, res) {
           generateAccessToken(username).then((token) => {
             const retUser = {
               ...retrievedUser,
-              token: token
+              token
             }
 
             res.status(200).send(retUser)

@@ -7,10 +7,10 @@ mongoose.set('debug', true)
 
 function addAccount(balance, income, spending, saving) {
   const account = {
-    balance: balance,
-    income: income,
-    spending: spending,
-    saving: saving
+    balance,
+    income,
+    spending,
+    saving
   }
   const accountToAdd = new AccountModel(account)
   const promise = accountToAdd.save()

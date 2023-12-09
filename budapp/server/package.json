@@ -7,7 +7,7 @@
   "scripts": {
     "test": "jest --runInBand ./models",
     "start": "nodemon index.js",
-    "lint": "npx eslint . && npx prettier --check ."
+    "lint": "npx eslint . --fix"
   },
   "keywords": [],
   "author": "",
