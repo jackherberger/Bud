@@ -1,37 +1,37 @@
-import mongoose from "mongoose"
+import mongoose from 'mongoose'
 
 const AccountSchema = new mongoose.Schema(
   {
     balance: {
       type: Number,
       required: true,
-      trim: true,
+      trim: true
     },
     income: {
       type: Number,
       required: true,
-      trim: true,
+      trim: true
     },
 
     spending: {
       type: Number,
       required: true,
-      trim: true,
+      trim: true
     },
 
     saving: {
       type: Number,
       required: true,
-      trim: true,
+      trim: true
     },
 
     assets: {
       type: Map,
-      of: String,
-    },
+      of: String
+    }
   },
-  { collection: "accounts_list" },
+  { collection: 'accounts_list' },
   { bufferTimeoutMS: 1000 }
 )
-const Account = mongoose.model("Account", AccountSchema)
+const Account = mongoose.model('Account', AccountSchema)
 export default Account
